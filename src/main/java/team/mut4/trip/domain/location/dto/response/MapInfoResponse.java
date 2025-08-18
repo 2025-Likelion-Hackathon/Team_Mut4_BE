@@ -7,7 +7,11 @@ public record MapInfoResponse(
 
         String placeName,
 
-        String addressName
+        String addressName,
+
+        double latitude,
+
+        double longitude
 
 ) {
 }
