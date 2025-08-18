@@ -3,6 +3,9 @@ package team.mut4.trip.domain.location.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.mut4.trip.domain.food.domain.Food;
+import team.mut4.trip.domain.food.domain.FoodRepository;
+import team.mut4.trip.domain.food.dto.response.FoodInfoResponse;
 import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.domain.LocationRepository;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
@@ -11,6 +14,7 @@ import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
 import team.mut4.trip.domain.location.dto.response.SearchResponse;
 import team.mut4.trip.global.config.KakaoMapClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
     private final KakaoMapClient kakaoMapClient;
+    private final FoodRepository foodRepository;
 
     @Transactional
     public LocationSaveResponse saveLocation(LocationSaveRequest request) {
@@ -66,7 +71,7 @@ public class LocationService {
                 .build();
     }
 
-    public SearchResponse findFoodByKeyword(Long locationId, String keyword, int radius) {
+    public List<FoodInfoResponse> searchAndSaveFood(Long locationId, String keyword, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
 
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
@@ -76,10 +81,24 @@ public class LocationService {
                 radius
         );
 
-        return SearchResponse.builder()
-                .mapInfoResponseList(places)
-                .build();
+        List<FoodInfoResponse> savedList = new ArrayList<>();
+        for (MapInfoResponse place : places) {
+            Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
+                    .orElseGet(() -> foodRepository.save(
+                            Food.builder()
+                                    .name(place.placeName())
+                                    .address(place.addressName())
+                                    .latitude(place.latitude())
+                                    .longitude(place.longitude())
+                                    .location(location)
+                                    .build()
+                    ));
+            savedList.add(FoodInfoResponse.from(food));
+        }
+
+        return savedList;
     }
+
 
     public SearchResponse findAccommodationsByKeyword(Long locationId, String keyword, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
