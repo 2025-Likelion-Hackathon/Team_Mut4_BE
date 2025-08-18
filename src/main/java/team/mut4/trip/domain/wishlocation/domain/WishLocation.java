@@ -23,21 +23,15 @@ public class WishLocation extends BaseTimeEntity {
 
     private String wishAddress;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
-    private Location location;
-
     @Builder
     private WishLocation(
             double latitude,
             double longitude,
-            String wishAddress,
-            Location location
+            String wishAddress
     ) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.wishAddress = wishAddress;
-        this.location = location;
     }
 
 }
