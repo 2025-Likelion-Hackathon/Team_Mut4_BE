@@ -52,4 +52,18 @@ public class LocationService {
                 .build();
     }
 
+    public SearchResponse findNearbyAccommodations(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+
+        List<MapInfoResponse> accommodations = kakaoMapClient.searchNearbyAccommodations(
+                location.getLongitude(),
+                location.getLatitude(),
+                radius
+        );
+
+        return SearchResponse.builder()
+                .mapInfoResponseList(accommodations)
+                .build();
+    }
+
 }

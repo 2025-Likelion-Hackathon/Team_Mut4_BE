@@ -31,6 +31,10 @@ public class KakaoMapClient {
         return searchNearby(longitude, latitude, radius, KakaoCategory.FOOD);
     }
 
+    public List<MapInfoResponse> searchNearbyAccommodations(double longitude, double latitude, int radius) {
+        return searchNearby(longitude, latitude, radius, KakaoCategory.ACCOMMODATION);
+    }
+
     public String getAddress(double longitude, double latitude) {
         String url = KakaoUrlBuilder.buildCoordToAddressUrl(longitude, latitude);
 

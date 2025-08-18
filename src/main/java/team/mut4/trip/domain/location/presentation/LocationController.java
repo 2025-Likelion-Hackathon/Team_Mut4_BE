@@ -36,4 +36,13 @@ public class LocationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{locationId}/nearby-accommodation")
+    public ResponseEntity<SearchResponse> findNearbyAccommodation(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        SearchResponse response = locationService.findNearbyAccommodations(locationId, radius);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }
