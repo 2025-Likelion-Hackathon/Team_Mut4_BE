@@ -9,11 +9,11 @@ import team.mut4.trip.domain.wishlocation.domain.WishLocationRepository;
 @Repository
 public class WishLocationRepositoryImpl implements WishLocationRepository {
 
-    private final WishLocationRepository wishLocationRepository;
+    private final WishLocationJpaRepository wishLocationJpaRepository;
 
     @Override
     public void save(WishLocation wishLocation) {
-        wishLocationRepository.save(wishLocation);
+        wishLocationJpaRepository.save(wishLocation);
     }
 
 }
