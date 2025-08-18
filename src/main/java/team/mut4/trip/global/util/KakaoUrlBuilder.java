@@ -10,4 +10,9 @@ public class KakaoUrlBuilder {
         );
     }
 
+    public static String buildCategorySearchUrl(KakaoCategory category, double longitude, double latitude, int radius) {
+        return String.format("%s/v2/local/search/category.json?category_group_code=%s&x=%f&y=%f&radius=%d",
+                BASE_URL, category.getCode(), longitude, latitude, radius);
+    }
+
 }

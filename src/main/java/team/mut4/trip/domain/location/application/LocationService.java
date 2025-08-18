@@ -7,7 +7,11 @@ import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.domain.LocationRepository;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
 import team.mut4.trip.domain.location.dto.response.LocationSaveResponse;
+import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
+import team.mut4.trip.domain.location.dto.response.SearchResponse;
 import team.mut4.trip.global.config.KakaoMapClient;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +35,20 @@ public class LocationService {
         return LocationSaveResponse.builder()
                 .locationId(location.getId())
                 .address(address)
+                .build();
+    }
+
+    public SearchResponse findNearbyFoodPlaces(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
+                location.getLongitude(),
+                location.getLatitude(),
+                radius
+        );
+
+        return SearchResponse.builder()
+                .mapInfoResponseList(places)
                 .build();
     }
 
