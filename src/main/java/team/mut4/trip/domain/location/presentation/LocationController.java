@@ -45,4 +45,13 @@ public class LocationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{locationId}/search/food")
+    public ResponseEntity<SearchResponse> searchFoodByKeyword(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "맛집") String keyword,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        return ResponseEntity.ok(locationService.findFoodByKeyword(locationId, keyword, radius));
+    }
+
 }

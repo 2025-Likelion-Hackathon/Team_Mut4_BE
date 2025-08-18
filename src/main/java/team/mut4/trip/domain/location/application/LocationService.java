@@ -66,4 +66,19 @@ public class LocationService {
                 .build();
     }
 
+    public SearchResponse findFoodByKeyword(Long locationId, String keyword, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+
+        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
+                keyword,
+                location.getLongitude(),
+                location.getLatitude(),
+                radius
+        );
+
+        return SearchResponse.builder()
+                .mapInfoResponseList(places)
+                .build();
+    }
+
 }

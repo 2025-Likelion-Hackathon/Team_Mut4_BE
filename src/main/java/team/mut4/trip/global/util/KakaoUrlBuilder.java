@@ -15,4 +15,10 @@ public class KakaoUrlBuilder {
                 BASE_URL, category.getCode(), longitude, latitude, radius);
     }
 
+    public static String buildKeywordSearchUrl(String keyword, double longitude, double latitude, int radius) {
+        return String.format("%s/v2/local/search/keyword.json?query=%s&x=%f&y=%f&radius=%d",
+                BASE_URL, keyword, longitude, latitude, radius
+        );
+    }
+
 }
