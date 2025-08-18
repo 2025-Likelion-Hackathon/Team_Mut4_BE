@@ -54,4 +54,13 @@ public class LocationController {
         return ResponseEntity.ok(locationService.findFoodByKeyword(locationId, keyword, radius));
     }
 
+    @GetMapping("/{locationId}/search/accommodation")
+    public ResponseEntity<SearchResponse> searchByKeyword(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "호텔") String keyword,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        return ResponseEntity.ok(locationService.findAccommodationsByKeyword(locationId, keyword, radius));
+    }
+
 }
