@@ -11,9 +11,9 @@ public record MapInfoResponse(
 
         String roadAddressName,
 
-        String placeUrl,
-
         String phone,
+
+        String placeUrl,
 
         double latitude,
 
