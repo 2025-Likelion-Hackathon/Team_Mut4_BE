@@ -7,7 +7,11 @@ import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.domain.LocationRepository;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
 import team.mut4.trip.domain.location.dto.response.LocationSaveResponse;
+import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
+import team.mut4.trip.domain.location.dto.response.SearchResponse;
 import team.mut4.trip.global.config.KakaoMapClient;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +35,64 @@ public class LocationService {
         return LocationSaveResponse.builder()
                 .locationId(location.getId())
                 .address(address)
+                .build();
+    }
+
+    public SearchResponse findNearbyFoodPlaces(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
+                location.getLongitude(),
+                location.getLatitude(),
+                radius
+        );
+
+        return SearchResponse.builder()
+                .mapInfoResponseList(places)
+                .build();
+    }
+
+    public SearchResponse findNearbyAccommodations(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+
+        List<MapInfoResponse> accommodations = kakaoMapClient.searchNearbyAccommodations(
+                location.getLongitude(),
+                location.getLatitude(),
+                radius
+        );
+
+        return SearchResponse.builder()
+                .mapInfoResponseList(accommodations)
+                .build();
+    }
+
+    public SearchResponse findFoodByKeyword(Long locationId, String keyword, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+
+        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
+                keyword,
+                location.getLongitude(),
+                location.getLatitude(),
+                radius
+        );
+
+        return SearchResponse.builder()
+                .mapInfoResponseList(places)
+                .build();
+    }
+
+    public SearchResponse findAccommodationsByKeyword(Long locationId, String keyword, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+
+        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByAccommodations(
+                keyword,
+                location.getLongitude(),
+                location.getLatitude(),
+                radius
+        );
+
+        return SearchResponse.builder()
+                .mapInfoResponseList(places)
                 .build();
     }
 

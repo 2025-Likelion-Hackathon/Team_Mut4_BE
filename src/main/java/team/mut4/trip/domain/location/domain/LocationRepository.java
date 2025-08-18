@@ -4,4 +4,6 @@ public interface LocationRepository {
 
     void save(Location location);
 
+    Location findByLocationId(Long locationId);
+
 }
