@@ -21,6 +21,12 @@ public class Food extends BaseTimeEntity {
 
     private String address;
 
+    private String roadAddress;
+
+    private String phone;
+
+    private String placeUrl;
+
     private double latitude;
 
     private double longitude;
@@ -29,9 +35,21 @@ public class Food extends BaseTimeEntity {
     private Location location;
 
     @Builder
-    private Food(String name, String address, double latitude, double longitude, Location location) {
+    private Food(
+            String name,
+            String address,
+            String roadAddress,
+            String phone,
+            String placeUrl,
+            double latitude,
+            double longitude,
+            Location location
+    ) {
         this.name = name;
         this.address = address;
+        this.roadAddress = roadAddress;
+        this.phone = phone;
+        this.placeUrl = placeUrl;
         this.latitude = latitude;
         this.longitude = longitude;
         this.location = location;

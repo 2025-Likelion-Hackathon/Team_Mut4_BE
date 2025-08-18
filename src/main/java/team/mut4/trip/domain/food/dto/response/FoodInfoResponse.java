@@ -8,6 +8,9 @@ public record FoodInfoResponse(
         Long id,
         String name,
         String address,
+        String roadAddress,
+        String phone,
+        String placeUrl,
         double latitude,
         double longitude
 ) {
@@ -16,6 +19,9 @@ public record FoodInfoResponse(
                 .id(food.getId())
                 .name(food.getName())
                 .address(food.getAddress())
+                .roadAddress(food.getRoadAddress())
+                .phone(food.getPhone())
+                .placeUrl(food.getPlaceUrl())
                 .latitude(food.getLatitude())
                 .longitude(food.getLongitude())
                 .build();
