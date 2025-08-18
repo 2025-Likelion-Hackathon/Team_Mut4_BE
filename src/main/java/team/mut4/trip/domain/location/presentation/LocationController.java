@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.mut4.trip.domain.food.domain.Food;
-import team.mut4.trip.domain.food.dto.response.FoodInfoResponse;
+import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
 import team.mut4.trip.domain.location.application.LocationService;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
 import team.mut4.trip.domain.location.dto.response.LocationSaveResponse;
@@ -50,12 +49,12 @@ public class LocationController {
     }
 
     @GetMapping("/{locationId}/search/food/save")
-    public ResponseEntity<List<FoodInfoResponse>> searchAndSaveFood(
+    public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
             @PathVariable Long locationId,
             @RequestParam(defaultValue = "맛집") String keyword,
             @RequestParam(defaultValue = "2000") int radius
     ) {
-        List<FoodInfoResponse> savedFoods = locationService.searchAndSaveFood(locationId, keyword, radius);
+        List<FoodBasicResponse> savedFoods = locationService.searchAndSaveFood(locationId, keyword, radius);
         return ResponseEntity.ok(savedFoods);
     }
 

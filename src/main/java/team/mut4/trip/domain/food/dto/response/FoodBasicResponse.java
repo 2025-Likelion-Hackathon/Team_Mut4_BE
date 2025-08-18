@@ -4,7 +4,7 @@ import lombok.Builder;
 import team.mut4.trip.domain.food.domain.Food;
 
 @Builder
-public record FoodInfoResponse(
+public record FoodBasicResponse(
         Long id,
         String name,
         String address,
@@ -14,8 +14,8 @@ public record FoodInfoResponse(
         double latitude,
         double longitude
 ) {
-    public static FoodInfoResponse from(Food food) {
-        return FoodInfoResponse.builder()
+    public static FoodBasicResponse from(Food food) {
+        return FoodBasicResponse.builder()
                 .id(food.getId())
                 .name(food.getName())
                 .address(food.getAddress())
