@@ -30,10 +30,7 @@ public class ChatBotController {
 
     @PostMapping
     public Mono<ChatBotResponse> chatWithAi(@Valid @RequestBody ChatBotRequest request) {
-
-        // chatBotService.create(request);
-
-        // ChatBotRequest payload = new ChatBotRequest(request.sessionId(), request.message());
+        chatBotService.create(request);
         return chatBotService.askFastApi(request);
     }
 }

@@ -40,7 +40,6 @@ public class ChatBotService {
     }
 
     public Mono<ChatBotResponse> askFastApi(ChatBotRequest request) {
-        create(request);
         return webClient.post()
                 .uri("/chat")
                 .bodyValue(request)
