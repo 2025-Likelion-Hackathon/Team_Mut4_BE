@@ -11,8 +11,7 @@ import java.util.List;
 public interface ChatBotJpaRepository extends JpaRepository<ChatBot, Long> {
 
     List<ChatBot> findBySessionIdOrderByCreatedAtAsc(String sessionId);
-    List<ChatBot> findTop50BySessionIdOrderByCreatedAtDesc(String sessionId);
 
-    @Query(value = "SELECT DISTINCT sessionId FROM chatbot", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT session_id FROM chatbot", nativeQuery = true)
     List<String> findAllSessionIdsNative();
 }
