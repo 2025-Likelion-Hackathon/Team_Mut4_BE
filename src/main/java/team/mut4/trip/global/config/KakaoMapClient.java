@@ -64,6 +64,11 @@ public class KakaoMapClient {
                                 .map(doc -> MapInfoResponse.builder()
                                         .placeName(doc.place_name())
                                         .addressName(doc.address_name())
+                                        .roadAddressName(doc.road_address_name())
+                                        .phone(doc.phone())
+                                        .placeUrl(doc.place_url())
+                                        .longitude(Double.parseDouble(doc.x()))
+                                        .latitude(Double.parseDouble(doc.y()))
                                         .build())
                                 .toList()
                 , "카카오 장소 검색 API 호출 중 오류 발생");
@@ -77,6 +82,11 @@ public class KakaoMapClient {
                                 .map(doc -> MapInfoResponse.builder()
                                         .placeName(doc.place_name())
                                         .addressName(doc.address_name())
+                                        .roadAddressName(doc.road_address_name())
+                                        .phone(doc.phone())
+                                        .placeUrl(doc.place_url())
+                                        .longitude(Double.parseDouble(doc.x()))
+                                        .latitude(Double.parseDouble(doc.y()))
                                         .build())
                                 .toList()
                 , "카카오 키워드 검색 API 호출 중 오류 발생");

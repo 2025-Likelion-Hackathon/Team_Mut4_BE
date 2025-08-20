@@ -21,6 +21,8 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     private Food food;
 
+    private String username;
+
     private String content;
 
     @OneToMany(mappedBy = "review")
@@ -29,9 +31,11 @@ public class Review {
     @Builder
     private Review(
             Food food,
+            String username,
             String content
     ) {
         this.food = food;
+        this.username = username;
         this.content = content;
     }
 

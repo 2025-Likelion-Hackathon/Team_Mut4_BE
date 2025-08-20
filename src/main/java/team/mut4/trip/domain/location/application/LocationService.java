@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.food.domain.FoodRepository;
-import team.mut4.trip.domain.food.dto.response.FoodInfoResponse;
+import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
 import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.domain.LocationRepository;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
@@ -71,7 +71,7 @@ public class LocationService {
                 .build();
     }
 
-    public List<FoodInfoResponse> searchAndSaveFood(Long locationId, String keyword, int radius) {
+    public List<FoodBasicResponse> searchAndSaveFood(Long locationId, String keyword, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
 
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
@@ -81,19 +81,22 @@ public class LocationService {
                 radius
         );
 
-        List<FoodInfoResponse> savedList = new ArrayList<>();
+        List<FoodBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
             Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
                     .orElseGet(() -> foodRepository.save(
                             Food.builder()
                                     .name(place.placeName())
                                     .address(place.addressName())
+                                    .roadAddress(place.roadAddressName())
+                                    .phone(place.phone())
+                                    .placeUrl(place.placeUrl())
                                     .latitude(place.latitude())
                                     .longitude(place.longitude())
                                     .location(location)
                                     .build()
                     ));
-            savedList.add(FoodInfoResponse.from(food));
+            savedList.add(FoodBasicResponse.from(food));
         }
 
         return savedList;
