@@ -17,10 +17,11 @@ public record FoodDetailResponse(
         String placeUrl,
         double latitude,
         double longitude,
+        String averageGrad,
         List<FoodReviewTagSummaryResponse> topTags,
         List<ReviewInfoResponse> reviews
 ) {
-    public static FoodDetailResponse from(Food food, List<FoodReviewTagSummaryResponse> topTags, List<ReviewInfoResponse> reviews) {
+    public static FoodDetailResponse from(Food food, String averageGrad, List<FoodReviewTagSummaryResponse> topTags, List<ReviewInfoResponse> reviews) {
         return FoodDetailResponse.builder()
                 .id(food.getId())
                 .name(food.getName())
@@ -30,6 +31,7 @@ public record FoodDetailResponse(
                 .placeUrl(food.getPlaceUrl())
                 .latitude(food.getLatitude())
                 .longitude(food.getLongitude())
+                .averageGrad(averageGrad)
                 .topTags(topTags)
                 .reviews(reviews)
                 .build();
