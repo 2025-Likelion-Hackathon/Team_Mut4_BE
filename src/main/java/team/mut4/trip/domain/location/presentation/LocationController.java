@@ -17,7 +17,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequiredArgsConstructor
 @RequestMapping("/locations")
 @RestController
-public class LocationController {
+public class LocationController implements LocationDocsController {
 
     private final LocationService locationService;
 
