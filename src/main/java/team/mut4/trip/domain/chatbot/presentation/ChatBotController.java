@@ -28,9 +28,9 @@ public class ChatBotController {
         return chatBotService.getAllBySession(sessionId);
     }
 
-    @PostMapping
-    public Mono<ChatBotResponse> chatWithAi(@Valid @RequestBody ChatBotRequest request) {
-        chatBotService.create(request);
-        return chatBotService.askFastApi(request);
-    }
+//    @PostMapping
+//    public Mono<ChatBotResponse> chatWithAi(@Valid @RequestBody ChatBotRequest request) {
+//        chatBotService.create(request);
+//        return chatBotService.askFastApi(request);
+//    }
 }

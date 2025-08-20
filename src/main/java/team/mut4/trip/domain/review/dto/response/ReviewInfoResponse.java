@@ -3,8 +3,12 @@ package team.mut4.trip.domain.review.dto.response;
 import lombok.Builder;
 import team.mut4.trip.domain.review.domain.Review;
 
+import java.util.List;
+
 @Builder
 public record ReviewInfoResponse(
+
+        Long id,
 
         String username,
 
@@ -12,9 +16,11 @@ public record ReviewInfoResponse(
 
 ) {
     public static ReviewInfoResponse from(Review review) {
-        return ReviewInfoResponse.builder()
-                .username(review.getUsername())
-                .content(review.getContent())
-                .build();
+        return new ReviewInfoResponse(
+                review.getId(),
+                review.getUsername(),
+                review.getContent()
+        );
     }
 }
+
