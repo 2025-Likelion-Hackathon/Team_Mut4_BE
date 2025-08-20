@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
+import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
 import team.mut4.trip.domain.wishlocation.domain.WishLocation;
 import team.mut4.trip.domain.wishlocation.domain.WishLocationRepository;
@@ -49,6 +50,16 @@ public class WishLocationService {
         );
 
         return saveFoodsFromPlaces(wishLocation, places, 5);
+    }
+
+    @Transactional
+    public List<FoodBasicResponse> findAndSaveAllNearbyFoodPlaces(Long wishLocationId, int radius) {
+        WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
+                wishLocation.getLongitude(), wishLocation.getLatitude(), radius
+        );
+
+        return saveFoodsFromPlaces(wishLocation, places, null);
     }
 
     @Transactional
