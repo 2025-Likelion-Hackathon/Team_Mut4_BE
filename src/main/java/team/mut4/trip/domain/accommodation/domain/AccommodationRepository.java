@@ -8,4 +8,6 @@ public interface AccommodationRepository {
 
     Optional<Accommodation> findByNameAndAddress(String name, String address);
 
+    Accommodation findByAccommodationId(Long accommodationId);
+
 }
