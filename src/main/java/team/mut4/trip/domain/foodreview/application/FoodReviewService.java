@@ -1,4 +1,4 @@
-package team.mut4.trip.domain.review.application;
+package team.mut4.trip.domain.foodreview.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,59 +8,59 @@ import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.foodreviewtag.application.FoodReviewTagService;
 import team.mut4.trip.domain.foodtag.application.FoodTagService;
 import team.mut4.trip.domain.foodtag.domain.FoodTag;
-import team.mut4.trip.domain.review.domain.Grade;
-import team.mut4.trip.domain.review.domain.Review;
-import team.mut4.trip.domain.review.domain.ReviewRepository;
-import team.mut4.trip.domain.review.dto.request.ReviewSaveRequest;
-import team.mut4.trip.domain.review.dto.response.FoodGradeSummaryResponse;
-import team.mut4.trip.domain.review.dto.response.ReviewSaveResponse;
+import team.mut4.trip.domain.foodreview.domain.FoodGrade;
+import team.mut4.trip.domain.foodreview.domain.FoodReview;
+import team.mut4.trip.domain.foodreview.domain.FoodReviewRepository;
+import team.mut4.trip.domain.foodreview.dto.request.FoodReviewSaveRequest;
+import team.mut4.trip.domain.foodreview.dto.response.FoodGradeSummaryResponse;
+import team.mut4.trip.domain.foodreview.dto.response.FoodReviewSaveResponse;
 import team.mut4.trip.global.util.RandomNicknameGenerator;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ReviewService {
+public class FoodReviewService {
 
-    private final ReviewRepository reviewRepository;
+    private final FoodReviewRepository foodReviewRepository;
     private final FoodRepository foodRepository;
     private final RandomNicknameGenerator nicknameGenerator;
     private final FoodTagService foodTagService;
     private final FoodReviewTagService foodReviewTagService;
 
     @Transactional
-    public ReviewSaveResponse saveReview(Long foodId, ReviewSaveRequest request) {
+    public FoodReviewSaveResponse saveReview(Long foodId, FoodReviewSaveRequest request) {
         Food food = foodRepository.findByFoodId(foodId);
 
         String randomUsername = nicknameGenerator.foodGenerate();
 
-        Review review = Review.builder()
+        FoodReview foodReview = FoodReview.builder()
                 .food(food)
                 .username(randomUsername)
                 .content(request.content())
-                .grade(Grade.valueOf(request.grade()))
+                .foodGrade(FoodGrade.valueOf(request.grade()))
                 .build();
-        reviewRepository.save(review);
+        foodReviewRepository.save(foodReview);
 
         List<FoodTag> foodTags = foodTagService.getFoodTagsByIds(request.foodTagIds());
-        foodReviewTagService.saveTagsForReview(review, foodTags);
+        foodReviewTagService.saveTagsForReview(foodReview, foodTags);
 
-        return ReviewSaveResponse.builder()
-                .reviewId(review.getId())
+        return FoodReviewSaveResponse.builder()
+                .reviewId(foodReview.getId())
                 .build();
     }
 
     @Transactional(readOnly = true)
     public FoodGradeSummaryResponse getFoodGradeSummary(Food food) {
-        List<Review> reviews = reviewRepository.findAllByFood(food);
-        double avgScore = reviews.stream()
-                .mapToInt(r -> r.getGrade().getScore())
+        List<FoodReview> foodReviews = foodReviewRepository.findAllByFood(food);
+        double avgScore = foodReviews.stream()
+                .mapToInt(r -> r.getFoodGrade().getScore())
                 .average()
                 .orElse(0.0);
-        Grade avgGrade = Grade.fromScore(avgScore);
+        FoodGrade avgFoodGrade = FoodGrade.fromScore(avgScore);
         return FoodGradeSummaryResponse.builder()
                 .averageScore(avgScore)
-                .averageGrade(avgGrade)
+                .averageGrade(avgFoodGrade)
                 .build();
     }
 

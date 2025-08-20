@@ -1,4 +1,4 @@
-package team.mut4.trip.domain.review.domain;
+package team.mut4.trip.domain.foodreview.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Review {
+public class FoodReview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,22 +26,22 @@ public class Review {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private Grade grade;
+    private FoodGrade foodGrade;
 
     @OneToMany(mappedBy = "review")
     private List<FoodReviewTag> foodReviewTag;
 
     @Builder
-    private Review(
+    private FoodReview(
             Food food,
             String username,
             String content,
-            Grade grade
+            FoodGrade foodGrade
     ) {
         this.food = food;
         this.username = username;
         this.content = content;
-        this.grade = grade;
+        this.foodGrade = foodGrade;
     }
 
 }

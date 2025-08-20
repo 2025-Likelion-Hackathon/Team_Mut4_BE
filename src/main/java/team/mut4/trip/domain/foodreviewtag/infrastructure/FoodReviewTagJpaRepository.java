@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTag;
-import team.mut4.trip.domain.review.domain.Review;
 
 import java.util.List;
 

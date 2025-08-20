@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.foodreviewtag.dto.response.FoodReviewTagSummaryResponse;
-import team.mut4.trip.domain.review.dto.response.ReviewInfoResponse;
+import team.mut4.trip.domain.foodreview.dto.response.FoodReviewInfoResponse;
 
 import java.util.List;
 
@@ -57,12 +57,12 @@ public record FoodDetailResponse(
                   {"id": 2, "username": "짭짤한 밥", "content": "string"}
                 ]
                 """)
-        List<ReviewInfoResponse> reviews
+        List<FoodReviewInfoResponse> reviews
 
 ) {
     public static FoodDetailResponse from(Food food, String averageGrad,
                                           List<FoodReviewTagSummaryResponse> topTags,
-                                          List<ReviewInfoResponse> reviews) {
+                                          List<FoodReviewInfoResponse> reviews) {
         return FoodDetailResponse.builder()
                 .id(food.getId())
                 .name(food.getName())

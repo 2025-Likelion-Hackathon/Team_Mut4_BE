@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTag;
 import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTagRepository;
-import team.mut4.trip.domain.review.domain.Review;
 
 import java.util.List;
 

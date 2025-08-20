@@ -9,11 +9,9 @@ import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTagRepository;
 import team.mut4.trip.domain.foodreviewtag.dto.response.FoodReviewTagSummaryResponse;
 import team.mut4.trip.domain.foodtag.domain.FoodTag;
 import team.mut4.trip.domain.foodtag.domain.FoodTagRepository;
-import team.mut4.trip.domain.review.domain.Review;
+import team.mut4.trip.domain.foodreview.domain.FoodReview;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -23,10 +21,10 @@ public class FoodReviewTagService {
     private final FoodTagRepository foodTagRepository;
 
     @Transactional
-    public void saveTagsForReview(Review review, List<FoodTag> tags) {
+    public void saveTagsForReview(FoodReview foodReview, List<FoodTag> tags) {
         tags.forEach(tag -> {
             FoodReviewTag reviewTag = FoodReviewTag.builder()
-                    .review(review)
+                    .review(foodReview)
                     .foodTag(tag)
                     .build();
             foodReviewTagRepository.save(reviewTag);
