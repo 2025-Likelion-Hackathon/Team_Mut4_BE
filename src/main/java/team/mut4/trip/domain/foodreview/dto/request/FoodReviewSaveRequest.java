@@ -1,4 +1,4 @@
-package team.mut4.trip.domain.review.dto.request;
+package team.mut4.trip.domain.foodreview.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Schema(description = "음식점 리뷰 저장 요청 DTO")
-public record ReviewSaveRequest(
+public record FoodReviewSaveRequest(
 
         @Schema(description = "음식점 리뷰 내용", example = "음식이 정말 맛있었어요!")
         @NotBlank(message = "리뷰를 입력해 주세요.")

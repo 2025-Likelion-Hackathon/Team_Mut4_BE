@@ -1,4 +1,4 @@
-package team.mut4.trip.domain.review.presentation.exception;
+package team.mut4.trip.domain.foodreview.presentation.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
