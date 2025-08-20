@@ -24,15 +24,20 @@ public class AccommodationReview extends BaseTimeEntity {
 
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private AccommodationGrade accommodationGrade;
+
     @Builder
     private AccommodationReview(
             Accommodation accommodation,
             String username,
-            String content
+            String content,
+            AccommodationGrade accommodationGrade
     ) {
         this.accommodation = accommodation;
         this.username = username;
         this.content = content;
+        this.accommodationGrade = accommodationGrade;
     }
 
 }
