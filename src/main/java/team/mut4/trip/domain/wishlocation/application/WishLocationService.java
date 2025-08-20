@@ -3,6 +3,9 @@ package team.mut4.trip.domain.wishlocation.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.mut4.trip.domain.accommodation.domain.Accommodation;
+import team.mut4.trip.domain.accommodation.domain.AccommodationRepository;
+import team.mut4.trip.domain.accommodation.dto.response.AccommodationBasicResponse;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
@@ -24,6 +27,7 @@ public class WishLocationService {
     private final WishLocationRepository wishLocationRepository;
     private final KakaoMapClient kakaoMapClient;
     private final FoodRepository foodRepository;
+    private final AccommodationRepository accommodationRepository;
 
     @Transactional
     public WishLocationSaveResponse saveWishLocation(WishLocationSaveRequest request) {
@@ -90,6 +94,62 @@ public class WishLocationService {
                                     .build()
                     ));
             savedList.add(FoodBasicResponse.from(food));
+        }
+
+        if (limit != null && savedList.size() > limit) {
+            return savedList.subList(0, limit);
+        }
+        return savedList;
+    }
+
+    @Transactional
+    public List<AccommodationBasicResponse> findNearbyAccommodationsAndSave(Long wishLocationId, int radius) {
+        WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyAccommodations(
+                wishLocation.getLongitude(), wishLocation.getLatitude(), radius
+        );
+
+        return saveAccommodationsFromPlaces(wishLocation, places, 5);
+    }
+
+    @Transactional
+    public List<AccommodationBasicResponse> findAndSaveAllNearbyAccommodations(Long wishLocationId, int radius) {
+        WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyAccommodations(
+                wishLocation.getLongitude(), wishLocation.getLatitude(), radius
+        );
+
+        return saveAccommodationsFromPlaces(wishLocation, places, null);
+    }
+
+    @Transactional
+    public List<AccommodationBasicResponse> searchAndSaveAccommodations(Long wishLocationId, String keyword, int radius) {
+        WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByAccommodations(
+                keyword, wishLocation.getLongitude(), wishLocation.getLatitude(), radius
+        );
+
+        return saveAccommodationsFromPlaces(wishLocation, places, null);
+    }
+
+    private List<AccommodationBasicResponse> saveAccommodationsFromPlaces(WishLocation wishLocation, List<MapInfoResponse> places, Integer limit) {
+        List<AccommodationBasicResponse> savedList = new ArrayList<>();
+        for (MapInfoResponse place : places) {
+            Accommodation accommodation = accommodationRepository.findByNameAndAddress(place.placeName(), place.addressName())
+                    .orElseGet(() -> accommodationRepository.save(
+                            Accommodation.builder()
+                                    .name(place.placeName())
+                                    .address(place.addressName())
+                                    .categoryName(place.categoryName())
+                                    .roadAddress(place.roadAddressName())
+                                    .phone(place.phone())
+                                    .placeUrl(place.placeUrl())
+                                    .latitude(place.latitude())
+                                    .longitude(place.longitude())
+                                    .wishLocation(wishLocation)
+                                    .build()
+                    ));
+            savedList.add(AccommodationBasicResponse.from(accommodation));
         }
 
         if (limit != null && savedList.size() > limit) {
