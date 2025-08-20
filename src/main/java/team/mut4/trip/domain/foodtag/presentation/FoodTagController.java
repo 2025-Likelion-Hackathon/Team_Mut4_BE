@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/food-tags")
-public class FoodTagController {
+public class FoodTagController implements FoodTagDocsController{
 
     private final FoodTagService foodTagService;
 
