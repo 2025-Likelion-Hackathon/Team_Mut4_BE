@@ -28,7 +28,7 @@ public class FoodReview {
     @Enumerated(EnumType.STRING)
     private FoodGrade foodGrade;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "foodReview")
     private List<FoodReviewTag> foodReviewTag;
 
     @Builder

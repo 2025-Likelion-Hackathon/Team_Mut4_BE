@@ -24,7 +24,7 @@ public class FoodReviewTagService {
     public void saveTagsForReview(FoodReview foodReview, List<FoodTag> tags) {
         tags.forEach(tag -> {
             FoodReviewTag reviewTag = FoodReviewTag.builder()
-                    .review(foodReview)
+                    .foodReview(foodReview)
                     .foodTag(tag)
                     .build();
             foodReviewTagRepository.save(reviewTag);

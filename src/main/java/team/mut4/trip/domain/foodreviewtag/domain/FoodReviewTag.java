@@ -18,7 +18,7 @@ public class FoodReviewTag {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "foodReview_id")
     private FoodReview foodReview;
 
     @ManyToOne(fetch = FetchType.LAZY)
