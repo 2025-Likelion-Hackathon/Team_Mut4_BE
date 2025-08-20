@@ -8,9 +8,11 @@ import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.foodreviewtag.application.FoodReviewTagService;
 import team.mut4.trip.domain.foodtag.application.FoodTagService;
 import team.mut4.trip.domain.foodtag.domain.FoodTag;
+import team.mut4.trip.domain.review.domain.Grade;
 import team.mut4.trip.domain.review.domain.Review;
 import team.mut4.trip.domain.review.domain.ReviewRepository;
 import team.mut4.trip.domain.review.dto.request.ReviewSaveRequest;
+import team.mut4.trip.domain.review.dto.response.FoodGradeSummaryResponse;
 import team.mut4.trip.domain.review.dto.response.ReviewSaveResponse;
 import team.mut4.trip.global.util.RandomNicknameGenerator;
 
@@ -36,6 +38,7 @@ public class ReviewService {
                 .food(food)
                 .username(randomUsername)
                 .content(request.content())
+                .grade(Grade.valueOf(request.grade()))
                 .build();
         reviewRepository.save(review);
 
@@ -46,4 +49,19 @@ public class ReviewService {
                 .reviewId(review.getId())
                 .build();
     }
+
+    @Transactional(readOnly = true)
+    public FoodGradeSummaryResponse getFoodGradeSummary(Food food) {
+        List<Review> reviews = reviewRepository.findAllByFood(food);
+        double avgScore = reviews.stream()
+                .mapToInt(r -> r.getGrade().getScore())
+                .average()
+                .orElse(0.0);
+        Grade avgGrade = Grade.fromScore(avgScore);
+        return FoodGradeSummaryResponse.builder()
+                .averageScore(avgScore)
+                .averageGrade(avgGrade)
+                .build();
+    }
+
 }

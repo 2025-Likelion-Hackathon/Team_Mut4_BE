@@ -25,6 +25,9 @@ public class Review {
 
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
+
     @OneToMany(mappedBy = "review")
     private List<FoodReviewTag> foodReviewTag;
 
@@ -32,11 +35,13 @@ public class Review {
     private Review(
             Food food,
             String username,
-            String content
+            String content,
+            Grade grade
     ) {
         this.food = food;
         this.username = username;
         this.content = content;
+        this.grade = grade;
     }
 
 }

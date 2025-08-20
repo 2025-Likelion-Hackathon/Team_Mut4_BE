@@ -88,6 +88,7 @@ public class LocationService {
                             Food.builder()
                                     .name(place.placeName())
                                     .address(place.addressName())
+                                    .categoryName(place.categoryName())
                                     .roadAddress(place.roadAddressName())
                                     .phone(place.phone())
                                     .placeUrl(place.placeUrl())

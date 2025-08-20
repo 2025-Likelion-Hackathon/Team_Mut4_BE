@@ -12,24 +12,28 @@ public record FoodDetailResponse(
         Long id,
         String name,
         String address,
+        String categoryName,
         String roadAddress,
         String phone,
         String placeUrl,
         double latitude,
         double longitude,
+        String averageGrad,
         List<FoodReviewTagSummaryResponse> topTags,
         List<ReviewInfoResponse> reviews
 ) {
-    public static FoodDetailResponse from(Food food, List<FoodReviewTagSummaryResponse> topTags, List<ReviewInfoResponse> reviews) {
+    public static FoodDetailResponse from(Food food, String averageGrad, List<FoodReviewTagSummaryResponse> topTags, List<ReviewInfoResponse> reviews) {
         return FoodDetailResponse.builder()
                 .id(food.getId())
                 .name(food.getName())
                 .address(food.getAddress())
+                .categoryName(food.getCategoryName())
                 .roadAddress(food.getRoadAddress())
                 .phone(food.getPhone())
                 .placeUrl(food.getPlaceUrl())
                 .latitude(food.getLatitude())
                 .longitude(food.getLongitude())
+                .averageGrad(averageGrad)
                 .topTags(topTags)
                 .reviews(reviews)
                 .build();

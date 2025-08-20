@@ -82,6 +82,7 @@ public class KakaoMapClient {
                                 .map(doc -> MapInfoResponse.builder()
                                         .placeName(doc.place_name())
                                         .addressName(doc.address_name())
+                                        .categoryName(doc.category_name())
                                         .roadAddressName(doc.road_address_name())
                                         .phone(doc.phone())
                                         .placeUrl(doc.place_url())
