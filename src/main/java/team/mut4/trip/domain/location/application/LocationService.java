@@ -43,44 +43,27 @@ public class LocationService {
                 .build();
     }
 
-    public SearchResponse findNearbyFoodPlaces(Long locationId, int radius) {
+    @Transactional
+    public List<FoodBasicResponse> findNearbyFoodPlacesAndSaveFood(Long locationId, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
-
         List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
-                location.getLongitude(),
-                location.getLatitude(),
-                radius
+                location.getLongitude(), location.getLatitude(), radius
         );
 
-        return SearchResponse.builder()
-                .mapInfoResponseList(places)
-                .build();
+        return saveFoodsFromPlaces(location, places, 5);
     }
 
-    public SearchResponse findNearbyAccommodations(Long locationId, int radius) {
-        Location location = locationRepository.findByLocationId(locationId);
-
-        List<MapInfoResponse> accommodations = kakaoMapClient.searchNearbyAccommodations(
-                location.getLongitude(),
-                location.getLatitude(),
-                radius
-        );
-
-        return SearchResponse.builder()
-                .mapInfoResponseList(accommodations)
-                .build();
-    }
-
+    @Transactional
     public List<FoodBasicResponse> searchAndSaveFood(Long locationId, String keyword, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
-
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
-                keyword,
-                location.getLongitude(),
-                location.getLatitude(),
-                radius
+                keyword, location.getLongitude(), location.getLatitude(), radius
         );
 
+        return saveFoodsFromPlaces(location, places, null);
+    }
+
+    private List<FoodBasicResponse> saveFoodsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
         List<FoodBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
             Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
@@ -100,23 +83,26 @@ public class LocationService {
             savedList.add(FoodBasicResponse.from(food));
         }
 
+        if (limit != null && savedList.size() > limit) {
+            return savedList.subList(0, limit);
+        }
         return savedList;
     }
 
+    public SearchResponse findNearbyAccommodations(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> accommodations = kakaoMapClient.searchNearbyAccommodations(
+                location.getLongitude(), location.getLatitude(), radius
+        );
+        return SearchResponse.builder().mapInfoResponseList(accommodations).build();
+    }
 
     public SearchResponse findAccommodationsByKeyword(Long locationId, String keyword, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
-
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByAccommodations(
-                keyword,
-                location.getLongitude(),
-                location.getLatitude(),
-                radius
+                keyword, location.getLongitude(), location.getLatitude(), radius
         );
-
-        return SearchResponse.builder()
-                .mapInfoResponseList(places)
-                .build();
+        return SearchResponse.builder().mapInfoResponseList(places).build();
     }
 
 }
