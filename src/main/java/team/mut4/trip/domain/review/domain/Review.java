@@ -3,6 +3,9 @@ package team.mut4.trip.domain.review.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import team.mut4.trip.domain.food.domain.Food;
+import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTag;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +22,9 @@ public class Review {
     private Food food;
 
     private String content;
+
+    @OneToMany(mappedBy = "review")
+    private List<FoodReviewTag> foodReviewTag;
 
     @Builder
     private Review(
