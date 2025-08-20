@@ -41,6 +41,15 @@ public class WishLocationController {
         return new ResponseEntity<>(savedFoods, HttpStatus.OK);
     }
 
+    @GetMapping("/{wishLocationId}/nearby-food-all")
+    public ResponseEntity<List<FoodBasicResponse>> getNearbyAllFoodPlacesAndSaveFood(
+            @PathVariable Long wishLocationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        List<FoodBasicResponse> savedFoods = wishLocationService.findAndSaveAllNearbyFoodPlaces(wishLocationId, radius);
+        return ResponseEntity.ok(savedFoods);
+    }
+
     @GetMapping("/{wishLocationId}/search/food/save")
     public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
             @PathVariable Long wishLocationId,
