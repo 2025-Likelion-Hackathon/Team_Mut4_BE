@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequiredArgsConstructor
 @RequestMapping("/wish-locations")
 @RestController
-public class WishLocationController {
+public class WishLocationController implements WishLocationDocsController {
 
     private final WishLocationService wishLocationService;
 
