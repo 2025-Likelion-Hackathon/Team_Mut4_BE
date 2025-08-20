@@ -8,6 +8,7 @@ public record FoodBasicResponse(
         Long id,
         String name,
         String address,
+        String categoryName,
         String roadAddress,
         String phone,
         String placeUrl,
@@ -19,6 +20,7 @@ public record FoodBasicResponse(
                 .id(food.getId())
                 .name(food.getName())
                 .address(food.getAddress())
+                .categoryName(food.getCategoryName())
                 .roadAddress(food.getRoadAddress())
                 .phone(food.getPhone())
                 .placeUrl(food.getPlaceUrl())

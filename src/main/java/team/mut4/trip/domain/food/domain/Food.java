@@ -21,6 +21,8 @@ public class Food extends BaseTimeEntity {
 
     private String address;
 
+    private String categoryName;
+
     private String roadAddress;
 
     private String phone;
@@ -38,6 +40,7 @@ public class Food extends BaseTimeEntity {
     private Food(
             String name,
             String address,
+            String categoryName,
             String roadAddress,
             String phone,
             String placeUrl,
@@ -47,6 +50,7 @@ public class Food extends BaseTimeEntity {
     ) {
         this.name = name;
         this.address = address;
+        this.categoryName = categoryName;
         this.roadAddress = roadAddress;
         this.phone = phone;
         this.placeUrl = placeUrl;
