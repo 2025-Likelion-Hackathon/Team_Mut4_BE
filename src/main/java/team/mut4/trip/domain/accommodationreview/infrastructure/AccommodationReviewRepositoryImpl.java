@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
-public class AccommodationRepositoryImpl implements AccommodationReviewRepository {
+public class AccommodationReviewRepositoryImpl implements AccommodationReviewRepository {
 
     private final AccommodationReviewJpaRepository accommodationReviewJpaRepository;
 
