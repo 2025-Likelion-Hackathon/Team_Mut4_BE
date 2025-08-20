@@ -3,6 +3,9 @@ package team.mut4.trip.domain.location.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.mut4.trip.domain.accommodation.domain.Accommodation;
+import team.mut4.trip.domain.accommodation.domain.AccommodationRepository;
+import team.mut4.trip.domain.accommodation.dto.response.AccommodationBasicResponse;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
@@ -24,6 +27,7 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final KakaoMapClient kakaoMapClient;
     private final FoodRepository foodRepository;
+    private final AccommodationRepository accommodationRepository;
 
     @Transactional
     public LocationSaveResponse saveLocation(LocationSaveRequest request) {
@@ -99,20 +103,60 @@ public class LocationService {
         return savedList;
     }
 
-    public SearchResponse findNearbyAccommodations(Long locationId, int radius) {
+    @Transactional
+    public List<AccommodationBasicResponse> findNearbyAccommodationsAndSave(Long locationId, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
-        List<MapInfoResponse> accommodations = kakaoMapClient.searchNearbyAccommodations(
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyAccommodations(
                 location.getLongitude(), location.getLatitude(), radius
         );
-        return SearchResponse.builder().mapInfoResponseList(accommodations).build();
+
+        return saveAccommodationsFromPlaces(location, places, 5);
     }
 
-    public SearchResponse findAccommodationsByKeyword(Long locationId, String keyword, int radius) {
+    @Transactional
+    public List<AccommodationBasicResponse> findAndSaveAllNearbyAccommodations(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyAccommodations(
+                location.getLongitude(), location.getLatitude(), radius
+        );
+
+        return saveAccommodationsFromPlaces(location, places, null);
+    }
+
+    @Transactional
+    public List<AccommodationBasicResponse> searchAndSaveAccommodations(Long locationId, String keyword, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByAccommodations(
                 keyword, location.getLongitude(), location.getLatitude(), radius
         );
-        return SearchResponse.builder().mapInfoResponseList(places).build();
+
+        return saveAccommodationsFromPlaces(location, places, null);
+    }
+
+    private List<AccommodationBasicResponse> saveAccommodationsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
+        List<AccommodationBasicResponse> savedList = new ArrayList<>();
+        for (MapInfoResponse place : places) {
+            Accommodation accommodation = accommodationRepository.findByNameAndAddress(place.placeName(), place.addressName())
+                    .orElseGet(() -> accommodationRepository.save(
+                            Accommodation.builder()
+                                    .name(place.placeName())
+                                    .address(place.addressName())
+                                    .categoryName(place.categoryName())
+                                    .roadAddress(place.roadAddressName())
+                                    .phone(place.phone())
+                                    .placeUrl(place.placeUrl())
+                                    .latitude(place.latitude())
+                                    .longitude(place.longitude())
+                                    .location(location)
+                                    .build()
+                    ));
+            savedList.add(AccommodationBasicResponse.from(accommodation));
+        }
+
+        if (limit != null && savedList.size() > limit) {
+            return savedList.subList(0, limit);
+        }
+        return savedList;
     }
 
 }

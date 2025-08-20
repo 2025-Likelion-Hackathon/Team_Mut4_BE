@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team.mut4.trip.domain.accommodation.dto.response.AccommodationBasicResponse;
 import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
 import team.mut4.trip.domain.location.application.LocationService;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
@@ -48,15 +49,6 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
-    @GetMapping("/{locationId}/nearby-accommodation")
-    public ResponseEntity<SearchResponse> findNearbyAccommodation(
-            @PathVariable Long locationId,
-            @RequestParam(defaultValue = "2000") int radius
-    ) {
-        SearchResponse response = locationService.findNearbyAccommodations(locationId, radius);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @GetMapping("/{locationId}/search/food/save")
     public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
             @PathVariable Long locationId,
@@ -67,14 +59,35 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
+    @GetMapping("/{locationId}/nearby-accommodation")
+    public ResponseEntity<List<AccommodationBasicResponse>> getNearbyAccommodationsAndSave(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        List<AccommodationBasicResponse> savedAccommodations =
+                locationService.findNearbyAccommodationsAndSave(locationId, radius);
+        return ResponseEntity.ok(savedAccommodations);
+    }
 
-    @GetMapping("/{locationId}/search/accommodation")
-    public ResponseEntity<SearchResponse> searchByKeyword(
+    @GetMapping("/{locationId}/nearby-accommodation-all")
+    public ResponseEntity<List<AccommodationBasicResponse>> getNearbyAllAccommodationsAndSave(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        List<AccommodationBasicResponse> savedAccommodations =
+                locationService.findAndSaveAllNearbyAccommodations(locationId, radius);
+        return ResponseEntity.ok(savedAccommodations);
+    }
+
+    @GetMapping("/{locationId}/search/accommodation/save")
+    public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodations(
             @PathVariable Long locationId,
             @RequestParam(defaultValue = "호텔") String keyword,
             @RequestParam(defaultValue = "2000") int radius
     ) {
-        return ResponseEntity.ok(locationService.findAccommodationsByKeyword(locationId, keyword, radius));
+        List<AccommodationBasicResponse> savedAccommodations =
+                locationService.searchAndSaveAccommodations(locationId, keyword, radius);
+        return ResponseEntity.ok(savedAccommodations);
     }
 
 }

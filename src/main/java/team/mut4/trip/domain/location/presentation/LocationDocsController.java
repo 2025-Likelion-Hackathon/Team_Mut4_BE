@@ -5,10 +5,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import team.mut4.trip.domain.accommodation.dto.response.AccommodationBasicResponse;
 import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
 import team.mut4.trip.domain.location.dto.response.LocationSaveResponse;
-import team.mut4.trip.domain.location.dto.response.SearchResponse;
 
 import java.util.List;
 
@@ -34,13 +34,6 @@ public interface LocationDocsController {
             @Parameter(description = "조회 반경(m)") @RequestParam(defaultValue = "2000") int radius
     );
 
-    @Operation(summary = "현재 위치 기반 주변 숙박 조회", description = "현재 위치 주변 숙박 시설을 조회합니다.")
-    @GetMapping("/{locationId}/nearby-accommodation")
-    ResponseEntity<SearchResponse> findNearbyAccommodation(
-            @Parameter(description = "조회할 현재 위치 ID") @PathVariable Long locationId,
-            @Parameter(description = "조회 반경(m)") @RequestParam(defaultValue = "2000") int radius
-    );
-
     @Operation(summary = "현재 위치 기반 음식 검색 후 저장", description = "현재 위치에서 키워드 기반으로 음식점 검색 후 DB에 저장합니다.")
     @GetMapping("/{locationId}/search/food/save")
     ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
@@ -49,10 +42,24 @@ public interface LocationDocsController {
             @Parameter(description = "조회 반경(m)") @RequestParam(defaultValue = "2000") int radius
     );
 
-    @Operation(summary = "현재 위치 기반 숙박 키워드 검색", description = "현재 위치에서 키워드 기반으로 숙박 시설을 검색합니다.")
-    @GetMapping("/{locationId}/search/accommodation")
-    ResponseEntity<SearchResponse> searchByKeyword(
-            @Parameter(description = "조회할 위치 ID") @PathVariable Long locationId,
+    @Operation(summary = "현재 위치 기반 주변 숙소 조회 후 저장 (5개만 추출)", description = "현재 위치 주변 숙소를 조회 후 DB에 저장합니다.")
+    @GetMapping("/{locationId}/nearby-accommodation")
+    ResponseEntity<List<AccommodationBasicResponse>> getNearbyAccommodationsAndSave(
+            @Parameter(description = "조회할 현재 위치 ID") @PathVariable Long locationId,
+            @Parameter(description = "조회 반경(m)") @RequestParam(defaultValue = "2000") int radius
+    );
+
+    @Operation(summary = "현재 위치 기반 주변 숙소 조회 후 저장 (모두 추출)", description = "현재 위치 주변 숙소를 조회 후 DB에 저장합니다.")
+    @GetMapping("/{locationId}/nearby-accommodation-all")
+    ResponseEntity<List<AccommodationBasicResponse>> getNearbyAllAccommodationsAndSave(
+            @Parameter(description = "조회할 현재 위치 ID") @PathVariable Long locationId,
+            @Parameter(description = "조회 반경(m)") @RequestParam(defaultValue = "2000") int radius
+    );
+
+    @Operation(summary = "현재 위치 기반 숙소 검색 후 저장", description = "현재 위치에서 키워드 기반으로 숙소 검색 후 DB에 저장합니다.")
+    @GetMapping("/{locationId}/search/accommodation/save")
+    ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodations(
+            @Parameter(description = "조회할 현재 위치 ID") @PathVariable Long locationId,
             @Parameter(description = "검색 키워드") @RequestParam(defaultValue = "호텔") String keyword,
             @Parameter(description = "조회 반경(m)") @RequestParam(defaultValue = "2000") int radius
     );
