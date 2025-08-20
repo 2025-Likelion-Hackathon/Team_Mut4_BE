@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.mut4.trip.domain.accommodation.domain.Accommodation;
 import team.mut4.trip.domain.accommodation.domain.AccommodationRepository;
+import team.mut4.trip.domain.accommodationreview.domain.AccommodationGrade;
 import team.mut4.trip.domain.accommodationreview.domain.AccommodationReview;
 import team.mut4.trip.domain.accommodationreview.domain.AccommodationReviewRepository;
 import team.mut4.trip.domain.accommodationreview.dto.request.AccommodationReviewSaveRequest;
@@ -32,6 +33,7 @@ public class AccommodationReviewService {
                 .accommodation(accommodation)
                 .username(randomUsername)
                 .content(request.content())
+                .accommodationGrade(AccommodationGrade.valueOf(request.grade()))
                 .build();
         accommodationReviewRepository.save(accommodationReview);
 
