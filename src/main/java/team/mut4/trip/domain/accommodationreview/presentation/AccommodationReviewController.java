@@ -11,7 +11,7 @@ import team.mut4.trip.domain.accommodationreview.dto.response.AccommodationRevie
 @RequiredArgsConstructor
 @RequestMapping("/accommodation-reviews")
 @RestController
-public class AccommodationReviewController {
+public class AccommodationReviewController implements AccommodationReviewDocsController{
 
     private final AccommodationReviewService accommodationReviewService;
 
