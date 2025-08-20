@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/accommodation-tags")
 @RestController
-public class AccommodationTagController {
+public class AccommodationTagController implements AccommodationTagDocsController {
 
     private final AccommodationTagService accommodationTagService;
 
