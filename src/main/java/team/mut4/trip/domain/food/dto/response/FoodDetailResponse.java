@@ -2,6 +2,7 @@ package team.mut4.trip.domain.food.dto.response;
 
 import lombok.Builder;
 import team.mut4.trip.domain.food.domain.Food;
+import team.mut4.trip.domain.foodreviewtag.dto.response.FoodReviewTagSummaryResponse;
 import team.mut4.trip.domain.review.dto.response.ReviewInfoResponse;
 
 import java.util.List;
@@ -16,9 +17,10 @@ public record FoodDetailResponse(
         String placeUrl,
         double latitude,
         double longitude,
+        List<FoodReviewTagSummaryResponse> topTags,
         List<ReviewInfoResponse> reviews
 ) {
-    public static FoodDetailResponse from(Food food, List<ReviewInfoResponse> reviews) {
+    public static FoodDetailResponse from(Food food, List<FoodReviewTagSummaryResponse> topTags, List<ReviewInfoResponse> reviews) {
         return FoodDetailResponse.builder()
                 .id(food.getId())
                 .name(food.getName())
@@ -28,6 +30,7 @@ public record FoodDetailResponse(
                 .placeUrl(food.getPlaceUrl())
                 .latitude(food.getLatitude())
                 .longitude(food.getLongitude())
+                .topTags(topTags)
                 .reviews(reviews)
                 .build();
     }

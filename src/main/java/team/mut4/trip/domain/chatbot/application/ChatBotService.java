@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class ChatBotService {
 
-    private final WebClient webClient;
+//    private final WebClient webClient;
     private final ChatBotRepository chatBotRepository;
 
     public void create(@Valid @RequestBody ChatBotRequest request) {
@@ -39,17 +39,17 @@ public class ChatBotService {
         return chatBotRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
     }
 
-    public Mono<ChatBotResponse> askFastApi(ChatBotRequest request) {
-        return webClient.post()
-                .uri("/chat")
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(ChatBotResponse.class)
-                .doOnSuccess(aiResponse -> {
-                    create(aiResponse);
-                });
-
-    }
+//    public Mono<ChatBotResponse> askFastApi(ChatBotRequest request) {
+//        return webClient.post()
+//                .uri("/chat")
+//                .bodyValue(request)
+//                .retrieve()
+//                .bodyToMono(ChatBotResponse.class)
+//                .doOnSuccess(aiResponse -> {
+//                    create(aiResponse);
+//                });
+//
+//    }
 
     private void create(ChatBotResponse aiResponse) {
         ChatBot chat = ChatBot.builder()
