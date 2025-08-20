@@ -54,6 +54,16 @@ public class LocationService {
     }
 
     @Transactional
+    public List<FoodBasicResponse> findAndSaveAllNearbyFoodPlaces(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
+                location.getLongitude(), location.getLatitude(), radius
+        );
+
+        return saveFoodsFromPlaces(location, places, null);
+    }
+
+    @Transactional
     public List<FoodBasicResponse> searchAndSaveFood(Long locationId, String keyword, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
