@@ -12,7 +12,7 @@ import team.mut4.trip.domain.food.dto.response.FoodDetailResponse;
 @RequiredArgsConstructor
 @RequestMapping("/foods")
 @RestController
-public class FoodController {
+public class FoodController implements FoodDocsController {
 
     private final FoodService foodService;
 
