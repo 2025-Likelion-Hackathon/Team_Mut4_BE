@@ -60,7 +60,7 @@ public class FoodReviewService {
         FoodGrade avgFoodGrade = FoodGrade.fromScore(avgScore);
         return FoodGradeSummaryResponse.builder()
                 .averageScore(avgScore)
-                .averageGrade(avgFoodGrade)
+                .averageFoodGrade(avgFoodGrade)
                 .build();
     }
 

@@ -11,7 +11,7 @@ public interface FoodReviewTagJpaRepository extends JpaRepository<FoodReviewTag,
 
     @Query("SELECT frt.foodTag.id, frt.foodTag.tagName, COUNT(frt) " +
             "FROM FoodReviewTag frt " +
-            "WHERE frt.review.food = :food " +
+            "WHERE frt.foodReview.food = :food " +
             "GROUP BY frt.foodTag.id, frt.foodTag.tagName " +
             "ORDER BY COUNT(frt) DESC")
     List<Object[]> findTagUsageCountByFood(Food food);
