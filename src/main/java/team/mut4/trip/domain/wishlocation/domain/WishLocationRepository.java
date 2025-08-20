@@ -4,4 +4,6 @@ public interface WishLocationRepository {
 
     void save(WishLocation wishLocation);
 
+    WishLocation findByWishLocationId(Long wishLocationId);
+
 }
