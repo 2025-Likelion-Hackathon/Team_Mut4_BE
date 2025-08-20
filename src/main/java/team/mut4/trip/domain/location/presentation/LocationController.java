@@ -39,6 +39,15 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
+    @GetMapping("/{locationId}/nearby-food-all")
+    public ResponseEntity<List<FoodBasicResponse>> getNearbyAllFoodPlacesAndSaveFood(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        List<FoodBasicResponse> savedFoods = locationService.findAndSaveAllNearbyFoodPlaces(locationId, radius);
+        return ResponseEntity.ok(savedFoods);
+    }
+
     @GetMapping("/{locationId}/nearby-accommodation")
     public ResponseEntity<SearchResponse> findNearbyAccommodation(
             @PathVariable Long locationId,
