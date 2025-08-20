@@ -6,9 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
-import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
-import team.mut4.trip.domain.location.dto.response.SearchResponse;
 import team.mut4.trip.domain.wishlocation.domain.WishLocation;
 import team.mut4.trip.domain.wishlocation.domain.WishLocationRepository;
 import team.mut4.trip.domain.wishlocation.dto.request.WishLocationSaveRequest;
@@ -43,30 +41,27 @@ public class WishLocationService {
                 .build();
     }
 
-    public SearchResponse findNearbyFoodPlaces(Long wishLocationId, int radius) {
+    @Transactional
+    public List<FoodBasicResponse> findNearbyFoodPlacesAndSaveFood(Long wishLocationId, int radius) {
         WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
-
         List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
-                wishLocation.getLongitude(),
-                wishLocation.getLatitude(),
-                radius
+                wishLocation.getLongitude(), wishLocation.getLatitude(), radius
         );
 
-        return SearchResponse.builder()
-                .mapInfoResponseList(places)
-                .build();
+        return saveFoodsFromPlaces(wishLocation, places, 5);
     }
 
+    @Transactional
     public List<FoodBasicResponse> searchAndSaveFood(Long wishLocationId, String keyword, int radius) {
         WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
-
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
-                keyword,
-                wishLocation.getLongitude(),
-                wishLocation.getLatitude(),
-                radius
+                keyword, wishLocation.getLongitude(), wishLocation.getLatitude(), radius
         );
 
+        return saveFoodsFromPlaces(wishLocation, places, null);
+    }
+
+    private List<FoodBasicResponse> saveFoodsFromPlaces(WishLocation wishLocation, List<MapInfoResponse> places, Integer limit) {
         List<FoodBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
             Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
@@ -86,6 +81,9 @@ public class WishLocationService {
             savedList.add(FoodBasicResponse.from(food));
         }
 
+        if (limit != null && savedList.size() > limit) {
+            return savedList.subList(0, limit);
+        }
         return savedList;
     }
 
