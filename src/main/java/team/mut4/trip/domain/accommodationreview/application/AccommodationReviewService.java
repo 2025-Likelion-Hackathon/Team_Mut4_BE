@@ -9,6 +9,7 @@ import team.mut4.trip.domain.accommodationreview.domain.AccommodationGrade;
 import team.mut4.trip.domain.accommodationreview.domain.AccommodationReview;
 import team.mut4.trip.domain.accommodationreview.domain.AccommodationReviewRepository;
 import team.mut4.trip.domain.accommodationreview.dto.request.AccommodationReviewSaveRequest;
+import team.mut4.trip.domain.accommodationreview.dto.response.AccommodationGradeSummaryResponse;
 import team.mut4.trip.domain.accommodationreview.dto.response.AccommodationReviewSaveResponse;
 import team.mut4.trip.domain.accommodationreviewtag.application.AccommodationReviewTagService;
 import team.mut4.trip.domain.accommodationtag.application.AccommodationTagService;
@@ -49,6 +50,23 @@ public class AccommodationReviewService {
 
         return AccommodationReviewSaveResponse.builder()
                 .accommodationReviewId(accommodationReview.getId())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public AccommodationGradeSummaryResponse getAccommodationGradeSummary(Accommodation accommodation) {
+        List<AccommodationReview> accommodationReviews = accommodationReviewRepository.findAllByAccommodation(accommodation);
+
+        double avgScore = accommodationReviews.stream()
+                .mapToInt(r -> r.getAccommodationGrade().getScore())
+                .average()
+                .orElse(0.0);
+
+        AccommodationGrade avgAccommodationGrade = AccommodationGrade.fromScore(avgScore);
+
+        return AccommodationGradeSummaryResponse.builder()
+                .averageScore(avgScore)
+                .averageAccommodationGrade(avgAccommodationGrade)
                 .build();
     }
 
