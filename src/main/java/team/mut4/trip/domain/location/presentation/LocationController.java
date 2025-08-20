@@ -31,12 +31,12 @@ public class LocationController implements LocationDocsController {
     }
 
     @GetMapping("/{locationId}/nearby-food")
-    public ResponseEntity<SearchResponse> getNearbyFoodPlaces(
+    public ResponseEntity<List<FoodBasicResponse>> getNearbyFoodPlacesAndSaveFood(
             @PathVariable Long locationId,
             @RequestParam(defaultValue = "2000") int radius
     ) {
-        SearchResponse response = locationService.findNearbyFoodPlaces(locationId, radius);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        List<FoodBasicResponse> savedFoods = locationService.findNearbyFoodPlacesAndSaveFood(locationId, radius);
+        return ResponseEntity.ok(savedFoods);
     }
 
     @GetMapping("/{locationId}/nearby-accommodation")

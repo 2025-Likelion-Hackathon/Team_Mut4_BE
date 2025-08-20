@@ -20,9 +20,9 @@ public interface LocationDocsController {
     @PostMapping
     ResponseEntity<LocationSaveResponse> saveLocation(@RequestBody LocationSaveRequest request);
 
-    @Operation(summary = "현재 위치 기반 주변 음식점 조회", description = "현재 위치 주변 음식점을 조회합니다.")
+    @Operation(summary = "현재 위치 기반 주변 음식점 조회 후 저장", description = "현재 위치 주변 음식점을 조회 후 DB에 저장합니다.")
     @GetMapping("/{locationId}/nearby-food")
-    ResponseEntity<SearchResponse> getNearbyFoodPlaces(
+    ResponseEntity<List<FoodBasicResponse>> getNearbyFoodPlacesAndSaveFood(
             @Parameter(description = "조회할 현재 위치 ID") @PathVariable Long locationId,
             @Parameter(description = "조회 반경(m)") @RequestParam(defaultValue = "2000") int radius
     );
