@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/chatbot")
 @RestController
-public class ChatBotController {
+public class ChatBotController implements ChatBotDocsController{
 
     private final ChatBotService chatBotService;
 

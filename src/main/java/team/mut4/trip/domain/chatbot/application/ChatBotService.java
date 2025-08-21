@@ -20,7 +20,7 @@ public class ChatBotService {
     private final WebClient webClient;
     private final ChatBotRepository chatBotRepository;
 
-    public void create(@Valid @RequestBody ChatBotRequest request) {
+    public void create(ChatBotRequest request) {
 
         ChatBot chat = ChatBot.builder()
                 .sessionId(request.sessionId())
@@ -55,7 +55,7 @@ public class ChatBotService {
         ChatBot chat = ChatBot.builder()
                 .sessionId(aiResponse.sessionId())
                 .role(aiResponse.message().role())
-                .content(aiResponse.message().content())
+                .content(aiResponse.message().content().toString())
                 .build();
 
         chatBotRepository.save(chat);
