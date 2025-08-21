@@ -17,10 +17,10 @@ import java.util.List;
 @Service
 public class ChatBotService {
 
-//    private final WebClient webClient;
+    private final WebClient webClient;
     private final ChatBotRepository chatBotRepository;
 
-    public void create(@Valid @RequestBody ChatBotRequest request) {
+    public void create(ChatBotRequest request) {
 
         ChatBot chat = ChatBot.builder()
                 .sessionId(request.sessionId())
@@ -39,23 +39,23 @@ public class ChatBotService {
         return chatBotRepository.findBySessionIdOrderByCreatedAtAsc(sessionId);
     }
 
-//    public Mono<ChatBotResponse> askFastApi(ChatBotRequest request) {
-//        return webClient.post()
-//                .uri("/chat")
-//                .bodyValue(request)
-//                .retrieve()
-//                .bodyToMono(ChatBotResponse.class)
-//                .doOnSuccess(aiResponse -> {
-//                    create(aiResponse);
-//                });
-//
-//    }
+    public Mono<ChatBotResponse> askFastApi(ChatBotRequest request) {
+        return webClient.post()
+                .uri("/chat")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(ChatBotResponse.class)
+                .doOnSuccess(aiResponse -> {
+                    create(aiResponse);
+                });
+
+    }
 
     private void create(ChatBotResponse aiResponse) {
         ChatBot chat = ChatBot.builder()
                 .sessionId(aiResponse.sessionId())
                 .role(aiResponse.message().role())
-                .content(aiResponse.message().content())
+                .content(aiResponse.message().content().toString())
                 .build();
 
         chatBotRepository.save(chat);

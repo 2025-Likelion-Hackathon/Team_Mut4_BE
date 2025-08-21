@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/chatbot")
 @RestController
-public class ChatBotController {
+public class ChatBotController implements ChatBotDocsController{
 
     private final ChatBotService chatBotService;
 
@@ -28,9 +28,9 @@ public class ChatBotController {
         return chatBotService.getAllBySession(sessionId);
     }
 
-//    @PostMapping
-//    public Mono<ChatBotResponse> chatWithAi(@Valid @RequestBody ChatBotRequest request) {
-//        chatBotService.create(request);
-//        return chatBotService.askFastApi(request);
-//    }
+    @PostMapping
+    public Mono<ChatBotResponse> chatWithAi(@Valid @RequestBody ChatBotRequest request) {
+        chatBotService.create(request);
+        return chatBotService.askFastApi(request);
+    }
 }
