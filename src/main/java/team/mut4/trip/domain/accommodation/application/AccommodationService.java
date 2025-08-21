@@ -37,7 +37,7 @@ public class AccommodationService {
 
         return AccommodationDetailResponse.from(
                 accommodation,
-                accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A",,
+                accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A",
                 topTags,
                 reviewResponses
         );
