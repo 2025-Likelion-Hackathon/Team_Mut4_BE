@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.mut4.trip.domain.accommodationreview.domain.AccommodationGrade;
+import team.mut4.trip.domain.foodreview.domain.FoodGrade;
 import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.wishlocation.domain.WishLocation;
 import team.mut4.trip.global.domain.BaseTimeEntity;
@@ -33,6 +35,11 @@ public class Accommodation extends BaseTimeEntity {
     private double latitude;
 
     private double longitude;
+
+    private double averageScore;
+
+    @Enumerated(EnumType.STRING)
+    private AccommodationGrade averageGrade;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Location location;
@@ -63,6 +70,11 @@ public class Accommodation extends BaseTimeEntity {
         this.longitude = longitude;
         this.location = location;
         this.wishLocation = wishLocation;
+    }
+
+    public void updateAverage(double newScore, AccommodationGrade newGrade) {
+        this.averageScore = newScore;
+        this.averageGrade = newGrade;
     }
 
 }

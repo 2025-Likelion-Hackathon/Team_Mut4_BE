@@ -14,6 +14,9 @@ import team.mut4.trip.domain.accommodationreview.dto.response.AccommodationRevie
 import team.mut4.trip.domain.accommodationreviewtag.application.AccommodationReviewTagService;
 import team.mut4.trip.domain.accommodationtag.application.AccommodationTagService;
 import team.mut4.trip.domain.accommodationtag.domain.AccommodationTag;
+import team.mut4.trip.domain.food.domain.Food;
+import team.mut4.trip.domain.foodreview.domain.FoodGrade;
+import team.mut4.trip.domain.foodreview.domain.FoodReview;
 import team.mut4.trip.global.util.RandomAccommodationNicknameGenerator;
 
 import java.util.List;
@@ -48,26 +51,23 @@ public class AccommodationReviewService {
         List<AccommodationTag> accommodationTags = accommodationTagService.getAccommodationTagsByIds(request.accommodationTagIds());
         accommodationReviewTagService.saveTagsForAccommodationReview(accommodationReview, accommodationTags);
 
+        updateFoodAverage(accommodation);
+
         return AccommodationReviewSaveResponse.builder()
                 .accommodationReviewId(accommodationReview.getId())
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public AccommodationGradeSummaryResponse getAccommodationGradeSummary(Accommodation accommodation) {
-        List<AccommodationReview> accommodationReviews = accommodationReviewRepository.findAllByAccommodation(accommodation);
-
-        double avgScore = accommodationReviews.stream()
+    @Transactional
+    protected void updateFoodAverage(Accommodation accommodation) {
+        List<AccommodationReview> reviews = accommodationReviewRepository.findAllByAccommodation(accommodation);
+        double avgScore = reviews.stream()
                 .mapToInt(r -> r.getAccommodationGrade().getScore())
                 .average()
                 .orElse(0.0);
+        AccommodationGrade avgGrade = AccommodationGrade.fromScore(avgScore);
 
-        AccommodationGrade avgAccommodationGrade = AccommodationGrade.fromScore(avgScore);
-
-        return AccommodationGradeSummaryResponse.builder()
-                .averageScore(avgScore)
-                .averageAccommodationGrade(avgAccommodationGrade)
-                .build();
+        accommodation.updateAverage(avgScore, avgGrade);
     }
 
 }

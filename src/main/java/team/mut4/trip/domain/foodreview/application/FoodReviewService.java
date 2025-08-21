@@ -45,23 +45,23 @@ public class FoodReviewService {
         List<FoodTag> foodTags = foodTagService.getFoodTagsByIds(request.foodTagIds());
         foodReviewTagService.saveTagsForReview(foodReview, foodTags);
 
+        updateFoodAverage(food);
+
         return FoodReviewSaveResponse.builder()
                 .reviewId(foodReview.getId())
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public FoodGradeSummaryResponse getFoodGradeSummary(Food food) {
-        List<FoodReview> foodReviews = foodReviewRepository.findAllByFood(food);
-        double avgScore = foodReviews.stream()
+    @Transactional
+    protected void updateFoodAverage(Food food) {
+        List<FoodReview> reviews = foodReviewRepository.findAllByFood(food);
+        double avgScore = reviews.stream()
                 .mapToInt(r -> r.getFoodGrade().getScore())
                 .average()
                 .orElse(0.0);
-        FoodGrade avgFoodGrade = FoodGrade.fromScore(avgScore);
-        return FoodGradeSummaryResponse.builder()
-                .averageScore(avgScore)
-                .averageFoodGrade(avgFoodGrade)
-                .build();
+        FoodGrade avgGrade = FoodGrade.fromScore(avgScore);
+
+        food.updateAverage(avgScore, avgGrade);
     }
 
 }

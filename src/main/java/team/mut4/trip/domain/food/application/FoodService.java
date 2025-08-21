@@ -22,15 +22,10 @@ public class FoodService {
     private final FoodRepository foodRepository;
     private final FoodReviewRepository foodReviewRepository;
     private final FoodReviewTagService foodReviewTagService;
-    private final FoodReviewService foodReviewService;
 
     @Transactional(readOnly = true)
     public FoodDetailResponse getFoodInfoWithReviews(Long foodId) {
         Food food = foodRepository.findByFoodId(foodId);
-
-        FoodGradeSummaryResponse response = foodReviewService.getFoodGradeSummary(food);
-
-        String averageGrade = String.valueOf(response.averageFoodGrade());
 
         List<FoodReviewTagSummaryResponse> topTags = foodReviewTagService.getTop3TagsByFood(food);
 
@@ -38,7 +33,10 @@ public class FoodService {
                 .map(FoodReviewInfoResponse::from)
                 .toList();
 
-        return FoodDetailResponse.from(food, averageGrade, topTags, reviewResponses);
+        return FoodDetailResponse.from(food,
+                food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A",
+                topTags,
+                reviewResponses);
     }
 
 }

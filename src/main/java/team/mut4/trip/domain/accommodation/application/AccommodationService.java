@@ -22,16 +22,10 @@ public class AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final AccommodationReviewRepository accommodationReviewRepository;
     private final AccommodationReviewTagService accommodationReviewTagService;
-    private final AccommodationReviewService accommodationReviewService;
 
     @Transactional(readOnly = true)
     public AccommodationDetailResponse getAccommodationInfoWithReviews(Long accommodationId) {
         Accommodation accommodation = accommodationRepository.findByAccommodationId(accommodationId);
-
-        AccommodationGradeSummaryResponse gradeResponse =
-                accommodationReviewService.getAccommodationGradeSummary(accommodation);
-
-        String averageGrade = String.valueOf(gradeResponse.averageAccommodationGrade());
 
         List<AccommodationReviewTagSummaryResponse> topTags =
                 accommodationReviewTagService.getTop3TagsByAccommodation(accommodation);
@@ -41,7 +35,12 @@ public class AccommodationService {
                         .map(AccommodationReviewInfoResponse::from)
                         .toList();
 
-        return AccommodationDetailResponse.from(accommodation, averageGrade, topTags, reviewResponses);
+        return AccommodationDetailResponse.from(
+                accommodation,
+                accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A",,
+                topTags,
+                reviewResponses
+        );
     }
 
 }
