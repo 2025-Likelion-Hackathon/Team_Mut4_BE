@@ -93,7 +93,7 @@ public class WishLocationService {
                                     .wishLocation(wishLocation)
                                     .build()
                     ));
-            savedList.add(FoodBasicResponse.from(food));
+            savedList.add(FoodBasicResponse.from(food, food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A"));
         }
 
         if (limit != null && savedList.size() > limit) {

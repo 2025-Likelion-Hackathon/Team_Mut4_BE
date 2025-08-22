@@ -94,7 +94,7 @@ public class LocationService {
                                     .location(location)
                                     .build()
                     ));
-            savedList.add(FoodBasicResponse.from(food));
+            savedList.add(FoodBasicResponse.from(food, food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A"));
         }
 
         if (limit != null && savedList.size() > limit) {
