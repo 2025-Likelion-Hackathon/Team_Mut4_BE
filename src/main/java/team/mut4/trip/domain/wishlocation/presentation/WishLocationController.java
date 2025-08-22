@@ -110,4 +110,25 @@ public class WishLocationController implements WishLocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
+    @GetMapping("/{wishLocationId}/search/accommodation/save/grade")
+    public ResponseEntity<List<AccommodationBasicResponse>> getNearbyAllAccommodationsSortedByGrade(
+            @PathVariable Long wishLocationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        return ResponseEntity.ok(
+                wishLocationService.findAndSaveAllNearbyAccommodationsSortedByGrade(wishLocationId, radius)
+        );
+    }
+
+    @GetMapping("/{wishLocationId}/nearby-accommodation-all/grade")
+    public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodationsSortedByGrade(
+            @PathVariable Long wishLocationId,
+            @RequestParam(defaultValue = "호텔") String keyword,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        return ResponseEntity.ok(
+                wishLocationService.searchAndSaveAccommodationsSortedByGrade(wishLocationId, keyword, radius)
+        );
+    }
+
 }
