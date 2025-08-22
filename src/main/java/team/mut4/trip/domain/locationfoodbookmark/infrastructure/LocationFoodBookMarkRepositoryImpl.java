@@ -7,6 +7,8 @@ import team.mut4.trip.domain.locationfoodbookmark.domain.LocationFoodBookMark;
 import team.mut4.trip.domain.locationfoodbookmark.domain.LocationFoodBookMarkRepository;
 import team.mut4.trip.domain.location.domain.Location;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Repository
 public class LocationFoodBookMarkRepositoryImpl implements LocationFoodBookMarkRepository {
@@ -21,6 +23,11 @@ public class LocationFoodBookMarkRepositoryImpl implements LocationFoodBookMarkR
     @Override
     public LocationFoodBookMark findByLocationAndFood(Location location, Food food) {
         return locationFoodBookMarkJpaRepository.findByLocationAndFood(location, food);
+    }
+
+    @Override
+    public List<LocationFoodBookMark> findAllByLocation(Location location) {
+        return locationFoodBookMarkJpaRepository.findAllByLocation(location);
     }
 
 }
