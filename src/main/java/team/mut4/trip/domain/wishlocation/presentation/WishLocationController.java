@@ -61,6 +61,27 @@ public class WishLocationController implements WishLocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
+    @GetMapping("/{wishLocationId}/nearby-food-all/grade")
+    public ResponseEntity<List<FoodBasicResponse>> getNearbyAllFoodsSortedByGrade(
+            @PathVariable Long wishLocationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        return ResponseEntity.ok(
+                wishLocationService.findAndSaveAllNearbyFoodPlacesSortedByGrade(wishLocationId, radius)
+        );
+    }
+
+    @GetMapping("/{wishLocationId}/search/food/save/grade")
+    public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFoodSortedByGrade(
+            @PathVariable Long wishLocationId,
+            @RequestParam(defaultValue = "맛집") String keyword,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        return ResponseEntity.ok(
+                wishLocationService.searchAndSaveFoodSortedByGrade(wishLocationId, keyword, radius)
+        );
+    }
+
     @GetMapping("/{wishLocationId}/nearby-accommodation")
     public ResponseEntity<List<AccommodationBasicResponse>> getNearbyAccommodations(
             @PathVariable Long wishLocationId,
