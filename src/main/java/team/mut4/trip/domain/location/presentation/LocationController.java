@@ -49,7 +49,7 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
-    @GetMapping("/{locationId}/search/food/save")
+    @GetMapping("/{locationId}/search/food")
     public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
             @PathVariable Long locationId,
             @RequestParam(defaultValue = "맛집") String keyword,
@@ -69,7 +69,7 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
-    @GetMapping("/{locationId}/search/food/save/grade")
+    @GetMapping("/{locationId}/search/food/grade")
     public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFoodSortedByGrade(
             @PathVariable Long locationId,
             @RequestParam(defaultValue = "맛집") String keyword,
@@ -100,7 +100,7 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
-    @GetMapping("/{locationId}/search/accommodation/save")
+    @GetMapping("/{locationId}/search/accommodation")
     public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodations(
             @PathVariable Long locationId,
             @RequestParam(defaultValue = "호텔") String keyword,
@@ -121,7 +121,7 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
-    @GetMapping("/{locationId}/search/accommodation/save/grade")
+    @GetMapping("/{locationId}/search/accommodation/grade")
     public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodationsSortedByGrade(
             @PathVariable Long locationId,
             @RequestParam(defaultValue = "호텔") String keyword,
