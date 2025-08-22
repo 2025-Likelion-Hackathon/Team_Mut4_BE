@@ -179,6 +179,26 @@ public class LocationService {
         return saveAccommodationsFromPlaces(location, places, null);
     }
 
+    @Transactional
+    public List<AccommodationBasicResponse> findAndSaveAllNearbyAccommodationsSortedByGrade(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyAccommodations(
+                location.getLongitude(), location.getLatitude(), radius
+        );
+
+        return processAndReturnAccommodations(location, places, null, accommodationGradeComparator());
+    }
+
+    @Transactional
+    public List<AccommodationBasicResponse> searchAndSaveAccommodationsSortedByGrade(Long locationId, String keyword, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByAccommodations(
+                keyword, location.getLongitude(), location.getLatitude(), radius
+        );
+
+        return processAndReturnAccommodations(location, places, null, accommodationGradeComparator());
+    }
+
     private List<AccommodationBasicResponse> saveAccommodationsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
         List<AccommodationBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
@@ -203,6 +223,25 @@ public class LocationService {
             return savedList.subList(0, limit);
         }
         return savedList;
+    }
+
+    private List<AccommodationBasicResponse> processAndReturnAccommodations(
+            Location location,
+            List<MapInfoResponse> places,
+            Integer limit,
+            Comparator<AccommodationBasicResponse> comparator
+    ) {
+        List<AccommodationBasicResponse> savedList = saveAccommodationsFromPlaces(location, places, limit);
+
+        if (comparator != null) {
+            savedList.sort(comparator);
+        }
+
+        return savedList;
+    }
+
+    private Comparator<AccommodationBasicResponse> accommodationGradeComparator() {
+        return (a1, a2) -> Integer.compare(gradeRank(a1.averageGrad()), gradeRank(a2.averageGrad()));
     }
 
 }

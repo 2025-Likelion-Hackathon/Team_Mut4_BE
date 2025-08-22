@@ -111,4 +111,25 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
+    @GetMapping("/{locationId}/nearby-accommodation-all/grade")
+    public ResponseEntity<List<AccommodationBasicResponse>> getNearbyAllAccommodationsSortedByGrade(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        List<AccommodationBasicResponse> savedAccommodations =
+                locationService.findAndSaveAllNearbyAccommodationsSortedByGrade(locationId, radius);
+        return ResponseEntity.ok(savedAccommodations);
+    }
+
+    @GetMapping("/{locationId}/search/accommodation/save/grade")
+    public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodationsSortedByGrade(
+            @PathVariable Long locationId,
+            @RequestParam(defaultValue = "호텔") String keyword,
+            @RequestParam(defaultValue = "2000") int radius
+    ) {
+        List<AccommodationBasicResponse> savedAccommodations =
+                locationService.searchAndSaveAccommodationsSortedByGrade(locationId, keyword, radius);
+        return ResponseEntity.ok(savedAccommodations);
+    }
+
 }
