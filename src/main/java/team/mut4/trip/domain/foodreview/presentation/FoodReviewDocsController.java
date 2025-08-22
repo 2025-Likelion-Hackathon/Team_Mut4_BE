@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import team.mut4.trip.domain.foodreview.dto.request.FoodReviewSaveRequest;
 import team.mut4.trip.domain.foodreview.dto.response.FoodReviewSaveResponse;
 
-@Tag(name = "Review", description = "음식점 리뷰 관련 API")
+@Tag(name = "FoodReview", description = "음식점 리뷰 관련 API")
 @RequestMapping("/food-reviews")
 public interface FoodReviewDocsController {
 
