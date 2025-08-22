@@ -37,7 +37,7 @@ public interface WishLocationDocsController {
     );
 
     @Operation(summary = "가고 싶은 장소 기반 음식 검색 후 저장", description = "선택한 가고 싶은 장소에서 키워드 기반 음식점 검색 후 DB에 저장합니다.")
-    @GetMapping("/{wishLocationId}/search/food/save")
+    @GetMapping("/{wishLocationId}/search/food")
     ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
             @Parameter(description = "조회할 가고 싶은 장소 ID") @PathVariable Long wishLocationId,
             @Parameter(description = "검색 키워드") @RequestParam(defaultValue = "맛집") String keyword,
@@ -52,7 +52,7 @@ public interface WishLocationDocsController {
     );
 
     @Operation(summary = "가고 싶은 장소 기반 음식 검색 후 평점 기준 정렬", description = "선택한 가고 싶은 장소에서 키워드 기반 음식점 검색 후 평점 기준으로 정렬 후 DB에 저장합니다.")
-    @GetMapping("/{wishLocationId}/search/food/save/grade")
+    @GetMapping("/{wishLocationId}/search/food/grade")
     ResponseEntity<List<FoodBasicResponse>> searchAndSaveFoodSortedByGrade(
             @Parameter(description = "조회할 가고 싶은 장소 ID") @PathVariable Long wishLocationId,
             @Parameter(description = "검색 키워드") @RequestParam(defaultValue = "맛집") String keyword,
@@ -74,7 +74,7 @@ public interface WishLocationDocsController {
     );
 
     @Operation(summary = "가고 싶은 장소 기반 숙박 키워드 검색 후 저장", description = "선택한 가고 싶은 장소에서 키워드 기반 숙박 시설 검색 후 DB에 저장합니다.")
-    @GetMapping("/{wishLocationId}/search/accommodation/save")
+    @GetMapping("/{wishLocationId}/search/accommodation")
     ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodations(
             @Parameter(description = "조회할 가고 싶은 장소 ID") @PathVariable Long wishLocationId,
             @Parameter(description = "검색 키워드") @RequestParam(defaultValue = "호텔") String keyword,
@@ -89,7 +89,7 @@ public interface WishLocationDocsController {
     );
 
     @Operation(summary = "가고 싶은 장소 기반 숙박 키워드 검색 후 평점 기준 정렬", description = "선택한 가고 싶은 장소에서 키워드 기반 숙박 시설 검색 후 평점 기준으로 정렬 후 DB에 저장합니다.")
-    @GetMapping("/{wishLocationId}/search/accommodation/save/grade")
+    @GetMapping("/{wishLocationId}/search/accommodation/grade")
     ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodationsSortedByGrade(
             @Parameter(description = "조회할 가고 싶은 장소 ID") @PathVariable Long wishLocationId,
             @Parameter(description = "검색 키워드") @RequestParam(defaultValue = "호텔") String keyword,
