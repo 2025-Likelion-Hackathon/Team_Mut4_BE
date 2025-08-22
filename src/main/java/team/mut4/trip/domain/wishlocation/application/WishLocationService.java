@@ -9,7 +9,6 @@ import team.mut4.trip.domain.accommodation.dto.response.AccommodationBasicRespon
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
-import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
 import team.mut4.trip.domain.wishlocation.domain.WishLocation;
 import team.mut4.trip.domain.wishlocation.domain.WishLocationRepository;
@@ -18,6 +17,7 @@ import team.mut4.trip.domain.wishlocation.dto.response.WishLocationSaveResponse;
 import team.mut4.trip.global.config.KakaoMapClient;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -76,6 +76,26 @@ public class WishLocationService {
         return saveFoodsFromPlaces(wishLocation, places, null);
     }
 
+    @Transactional
+    public List<FoodBasicResponse> findAndSaveAllNearbyFoodPlacesSortedByGrade(Long wishLocationId, int radius) {
+        WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
+                wishLocation.getLongitude(), wishLocation.getLatitude(), radius
+        );
+
+        return processAndReturnFoods(wishLocation, places, foodGradeComparator());
+    }
+
+    @Transactional
+    public List<FoodBasicResponse> searchAndSaveFoodSortedByGrade(Long wishLocationId, String keyword, int radius) {
+        WishLocation wishLocation = wishLocationRepository.findByWishLocationId(wishLocationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
+                keyword, wishLocation.getLongitude(), wishLocation.getLatitude(), radius
+        );
+
+        return processAndReturnFoods(wishLocation, places, foodGradeComparator());
+    }
+
     private List<FoodBasicResponse> saveFoodsFromPlaces(WishLocation wishLocation, List<MapInfoResponse> places, Integer limit) {
         List<FoodBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
@@ -100,6 +120,24 @@ public class WishLocationService {
             return savedList.subList(0, limit);
         }
         return savedList;
+    }
+
+    private List<FoodBasicResponse> processAndReturnFoods(
+            WishLocation wishLocation,
+            List<MapInfoResponse> places,
+            Comparator<FoodBasicResponse> comparator
+    ) {
+        List<FoodBasicResponse> savedList = saveFoodsFromPlaces(wishLocation, places, null);
+
+        if (comparator != null) {
+            savedList.sort(comparator);
+        }
+
+        return savedList;
+    }
+
+    private Comparator<FoodBasicResponse> foodGradeComparator() {
+        return (f1, f2) -> Integer.compare(gradeRank(f1.averageGrad()), gradeRank(f2.averageGrad()));
     }
 
     @Transactional
@@ -156,6 +194,17 @@ public class WishLocationService {
             return savedList.subList(0, limit);
         }
         return savedList;
+    }
+
+    private int gradeRank(String grade) {
+        return switch (grade) {
+            case "A" -> 1;
+            case "B" -> 2;
+            case "C" -> 3;
+            case "D" -> 4;
+            case "E" -> 5;
+            default -> 6;
+        };
     }
 
 }
