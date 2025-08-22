@@ -16,6 +16,7 @@ import team.mut4.trip.domain.location.dto.response.LocationSaveResponse;
 import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
 import team.mut4.trip.domain.location.dto.response.SearchResponse;
 import team.mut4.trip.global.config.KakaoMapClient;
+import team.mut4.trip.global.util.GradeUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -135,18 +136,7 @@ public class LocationService {
     }
 
     private Comparator<FoodBasicResponse> gradeComparator() {
-        return (f1, f2) -> Integer.compare(gradeRank(f1.averageGrad()), gradeRank(f2.averageGrad()));
-    }
-
-    private int gradeRank(String grade) {
-        return switch (grade) {
-            case "A" -> 1;
-            case "B" -> 2;
-            case "C" -> 3;
-            case "D" -> 4;
-            case "E" -> 5;
-            default -> 6;
-        };
+        return Comparator.comparingInt(f -> GradeUtil.toRank(f.averageGrad()));
     }
 
     @Transactional
@@ -241,7 +231,7 @@ public class LocationService {
     }
 
     private Comparator<AccommodationBasicResponse> accommodationGradeComparator() {
-        return (a1, a2) -> Integer.compare(gradeRank(a1.averageGrad()), gradeRank(a2.averageGrad()));
+        return Comparator.comparingInt(a -> GradeUtil.toRank(a.averageGrad()));
     }
 
 }
