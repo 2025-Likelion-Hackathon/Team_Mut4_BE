@@ -11,7 +11,7 @@ import team.mut4.trip.domain.foodreview.dto.response.FoodReviewSaveResponse;
 @RequiredArgsConstructor
 @RequestMapping("/food-reviews")
 @RestController
-public class ReviewController implements ReviewDocsController {
+public class FoodFoodReviewController implements FoodReviewDocsController {
 
     private final FoodReviewService foodReviewService;
 
