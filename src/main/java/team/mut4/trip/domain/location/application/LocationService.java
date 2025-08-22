@@ -150,7 +150,7 @@ public class LocationService {
                                     .location(location)
                                     .build()
                     ));
-            savedList.add(AccommodationBasicResponse.from(accommodation));
+            savedList.add(AccommodationBasicResponse.from(accommodation, accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A"));
         }
 
         if (limit != null && savedList.size() > limit) {

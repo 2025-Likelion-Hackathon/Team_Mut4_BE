@@ -32,10 +32,12 @@ public record AccommodationBasicResponse(
         double latitude,
 
         @Schema(description = "경도", example = "127.1559018")
-        double longitude
+        double longitude,
+
+        String averageGrad
 
 ) {
-    public static AccommodationBasicResponse from(Accommodation accommodation) {
+    public static AccommodationBasicResponse from(Accommodation accommodation, String averageGrad) {
         return AccommodationBasicResponse.builder()
                 .id(accommodation.getId())
                 .name(accommodation.getName())
@@ -46,6 +48,7 @@ public record AccommodationBasicResponse(
                 .placeUrl(accommodation.getPlaceUrl())
                 .latitude(accommodation.getLatitude())
                 .longitude(accommodation.getLongitude())
+                .averageGrad(averageGrad)
                 .build();
     }
 }
