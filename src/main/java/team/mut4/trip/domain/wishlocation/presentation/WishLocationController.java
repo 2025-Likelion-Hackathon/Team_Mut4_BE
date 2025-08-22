@@ -51,7 +51,7 @@ public class WishLocationController implements WishLocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
-    @GetMapping("/{wishLocationId}/search/food/save")
+    @GetMapping("/{wishLocationId}/search/food")
     public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
             @PathVariable Long wishLocationId,
             @RequestParam(defaultValue = "맛집") String keyword,
@@ -71,7 +71,7 @@ public class WishLocationController implements WishLocationDocsController {
         );
     }
 
-    @GetMapping("/{wishLocationId}/search/food/save/grade")
+    @GetMapping("/{wishLocationId}/search/food/grade")
     public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFoodSortedByGrade(
             @PathVariable Long wishLocationId,
             @RequestParam(defaultValue = "맛집") String keyword,
@@ -100,7 +100,7 @@ public class WishLocationController implements WishLocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
-    @GetMapping("/{wishLocationId}/search/accommodation/save")
+    @GetMapping("/{wishLocationId}/search/accommodation")
     public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodations(
             @PathVariable Long wishLocationId,
             @RequestParam(defaultValue = "호텔") String keyword,
@@ -110,7 +110,7 @@ public class WishLocationController implements WishLocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
-    @GetMapping("/{wishLocationId}/search/accommodation/save/grade")
+    @GetMapping("/{wishLocationId}/search/accommodation/grade")
     public ResponseEntity<List<AccommodationBasicResponse>> getNearbyAllAccommodationsSortedByGrade(
             @PathVariable Long wishLocationId,
             @RequestParam(defaultValue = "2000") int radius
