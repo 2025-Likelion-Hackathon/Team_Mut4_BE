@@ -9,7 +9,7 @@ import team.mut4.trip.domain.foodreview.dto.request.FoodReviewSaveRequest;
 import team.mut4.trip.domain.foodreview.dto.response.FoodReviewSaveResponse;
 
 @RequiredArgsConstructor
-@RequestMapping("/reviews")
+@RequestMapping("/food-reviews")
 @RestController
 public class ReviewController implements ReviewDocsController {
 

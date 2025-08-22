@@ -9,7 +9,7 @@ import team.mut4.trip.domain.foodreview.dto.request.FoodReviewSaveRequest;
 import team.mut4.trip.domain.foodreview.dto.response.FoodReviewSaveResponse;
 
 @Tag(name = "Review", description = "음식점 리뷰 관련 API")
-@RequestMapping("/reviews")
+@RequestMapping("/food-reviews")
 public interface ReviewDocsController {
 
     @Operation(summary = "음식점 리뷰 저장", description = "음식점에 대한 리뷰를 저장합니다.")
