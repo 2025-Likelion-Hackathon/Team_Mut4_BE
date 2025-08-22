@@ -18,6 +18,7 @@ import team.mut4.trip.domain.location.dto.response.SearchResponse;
 import team.mut4.trip.global.config.KakaoMapClient;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -53,8 +54,7 @@ public class LocationService {
         List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
                 location.getLongitude(), location.getLatitude(), radius
         );
-
-        return saveFoodsFromPlaces(location, places, 5);
+        return processAndReturnFoods(location, places, 5, null);
     }
 
     @Transactional
@@ -63,8 +63,7 @@ public class LocationService {
         List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
                 location.getLongitude(), location.getLatitude(), radius
         );
-
-        return saveFoodsFromPlaces(location, places, null);
+        return processAndReturnFoods(location, places, null, null);
     }
 
     @Transactional
@@ -73,8 +72,25 @@ public class LocationService {
         List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
                 keyword, location.getLongitude(), location.getLatitude(), radius
         );
+        return processAndReturnFoods(location, places, null, null);
+    }
 
-        return saveFoodsFromPlaces(location, places, null);
+    @Transactional
+    public List<FoodBasicResponse> findAndSaveAllNearbyFoodPlacesSortedByGrade(Long locationId, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
+                location.getLongitude(), location.getLatitude(), radius
+        );
+        return processAndReturnFoods(location, places, null, gradeComparator());
+    }
+
+    @Transactional
+    public List<FoodBasicResponse> searchAndSaveFoodSortedByGrade(Long locationId, String keyword, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
+                keyword, location.getLongitude(), location.getLatitude(), radius
+        );
+        return processAndReturnFoods(location, places, null, gradeComparator());
     }
 
     private List<FoodBasicResponse> saveFoodsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
@@ -101,6 +117,36 @@ public class LocationService {
             return savedList.subList(0, limit);
         }
         return savedList;
+    }
+
+    private List<FoodBasicResponse> processAndReturnFoods(
+            Location location,
+            List<MapInfoResponse> places,
+            Integer limit,
+            Comparator<FoodBasicResponse> comparator
+    ) {
+        List<FoodBasicResponse> savedList = saveFoodsFromPlaces(location, places, limit);
+
+        if (comparator != null) {
+            savedList.sort(comparator);
+        }
+
+        return savedList;
+    }
+
+    private Comparator<FoodBasicResponse> gradeComparator() {
+        return (f1, f2) -> Integer.compare(gradeRank(f1.averageGrad()), gradeRank(f2.averageGrad()));
+    }
+
+    private int gradeRank(String grade) {
+        return switch (grade) {
+            case "A" -> 1;
+            case "B" -> 2;
+            case "C" -> 3;
+            case "D" -> 4;
+            case "E" -> 5;
+            default -> 6;
+        };
     }
 
     @Transactional
