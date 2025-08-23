@@ -68,28 +68,10 @@ public class LocationService {
     }
 
     @Transactional
-    public List<FoodBasicResponse> searchAndSaveFood(Long locationId, String keyword, int radius) {
-        Location location = locationRepository.findByLocationId(locationId);
-        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
-                keyword, location.getLongitude(), location.getLatitude(), radius
-        );
-        return processAndReturnFoods(location, places, null, null);
-    }
-
-    @Transactional
     public List<FoodBasicResponse> findAndSaveAllNearbyFoodPlacesSortedByGrade(Long locationId, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
         List<MapInfoResponse> places = kakaoMapClient.searchNearbyRestaurants(
                 location.getLongitude(), location.getLatitude(), radius
-        );
-        return processAndReturnFoods(location, places, null, gradeComparator());
-    }
-
-    @Transactional
-    public List<FoodBasicResponse> searchAndSaveFoodSortedByGrade(Long locationId, String keyword, int radius) {
-        Location location = locationRepository.findByLocationId(locationId);
-        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByRestaurants(
-                keyword, location.getLongitude(), location.getLatitude(), radius
         );
         return processAndReturnFoods(location, places, null, gradeComparator());
     }
@@ -160,30 +142,10 @@ public class LocationService {
     }
 
     @Transactional
-    public List<AccommodationBasicResponse> searchAndSaveAccommodations(Long locationId, String keyword, int radius) {
-        Location location = locationRepository.findByLocationId(locationId);
-        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByAccommodations(
-                keyword, location.getLongitude(), location.getLatitude(), radius
-        );
-
-        return saveAccommodationsFromPlaces(location, places, null);
-    }
-
-    @Transactional
     public List<AccommodationBasicResponse> findAndSaveAllNearbyAccommodationsSortedByGrade(Long locationId, int radius) {
         Location location = locationRepository.findByLocationId(locationId);
         List<MapInfoResponse> places = kakaoMapClient.searchNearbyAccommodations(
                 location.getLongitude(), location.getLatitude(), radius
-        );
-
-        return processAndReturnAccommodations(location, places, null, accommodationGradeComparator());
-    }
-
-    @Transactional
-    public List<AccommodationBasicResponse> searchAndSaveAccommodationsSortedByGrade(Long locationId, String keyword, int radius) {
-        Location location = locationRepository.findByLocationId(locationId);
-        List<MapInfoResponse> places = kakaoMapClient.searchKeywordByAccommodations(
-                keyword, location.getLongitude(), location.getLatitude(), radius
         );
 
         return processAndReturnAccommodations(location, places, null, accommodationGradeComparator());
@@ -232,6 +194,91 @@ public class LocationService {
 
     private Comparator<AccommodationBasicResponse> accommodationGradeComparator() {
         return Comparator.comparingInt(a -> GradeUtil.toRank(a.averageGrad()));
+    }
+
+    @Transactional
+    public List<MapInfoResponse> searchAndSaveByCategory(Long locationId, String keyword, int radius) {
+        Location location = locationRepository.findByLocationId(locationId);
+        List<MapInfoResponse> places = kakaoMapClient.searchNearbyByKeyword(
+                keyword, location.getLongitude(), location.getLatitude(), radius
+        );
+
+        List<MapInfoResponse> result = new ArrayList<>();
+
+        for (MapInfoResponse place : places) {
+            if (place.categoryName().startsWith("음식점")) {
+                Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
+                        .orElseGet(() -> foodRepository.save(
+                                Food.builder()
+                                        .name(place.placeName())
+                                        .address(place.addressName())
+                                        .categoryName(place.categoryName())
+                                        .roadAddress(place.roadAddressName())
+                                        .phone(place.phone())
+                                        .placeUrl(place.placeUrl())
+                                        .latitude(place.latitude())
+                                        .longitude(place.longitude())
+                                        .location(location)
+                                        .build()
+                        ));
+
+                result.add(MapInfoResponse.builder()
+                        .id(food.getId())
+                        .placeName(food.getName())
+                        .addressName(food.getAddress())
+                        .categoryName(food.getCategoryName())
+                        .roadAddressName(food.getRoadAddress())
+                        .phone(food.getPhone())
+                        .placeUrl(food.getPlaceUrl())
+                        .latitude(food.getLatitude())
+                        .longitude(food.getLongitude())
+                        .averageGrad(food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A")
+                        .build());
+            } else if (place.categoryName().startsWith("여행")) {
+                Accommodation accommodation = accommodationRepository.findByNameAndAddress(place.placeName(), place.addressName())
+                        .orElseGet(() -> accommodationRepository.save(
+                                Accommodation.builder()
+                                        .name(place.placeName())
+                                        .address(place.addressName())
+                                        .categoryName(place.categoryName())
+                                        .roadAddress(place.roadAddressName())
+                                        .phone(place.phone())
+                                        .placeUrl(place.placeUrl())
+                                        .latitude(place.latitude())
+                                        .longitude(place.longitude())
+                                        .location(location)
+                                        .build()
+                        ));
+
+                result.add(MapInfoResponse.builder()
+                        .id(accommodation.getId())
+                        .placeName(accommodation.getName())
+                        .addressName(accommodation.getAddress())
+                        .categoryName(accommodation.getCategoryName())
+                        .roadAddressName(accommodation.getRoadAddress())
+                        .phone(accommodation.getPhone())
+                        .placeUrl(accommodation.getPlaceUrl())
+                        .latitude(accommodation.getLatitude())
+                        .longitude(accommodation.getLongitude())
+                        .averageGrad(accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A")
+                        .build());
+            }
+        }
+
+        return result;
+    }
+
+    @Transactional
+    public List<MapInfoResponse> searchAndSaveByCategorySortedByGrade(Long locationId, String keyword, int radius) {
+        List<MapInfoResponse> result = searchAndSaveByCategory(locationId, keyword, radius);
+
+        result.sort((a, b) -> {
+            int rankA = a.averageGrad().equals("N/A") ? -1 : GradeUtil.toRank(a.averageGrad());
+            int rankB = b.averageGrad().equals("N/A") ? -1 : GradeUtil.toRank(b.averageGrad());
+            return Integer.compare(rankB, rankA);
+        });
+
+        return result;
     }
 
 }

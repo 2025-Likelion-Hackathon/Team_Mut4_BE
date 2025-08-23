@@ -75,7 +75,7 @@ public class KakaoMapClient {
                 , "카카오 장소 검색 API 호출 중 오류 발생");
     }
 
-    private List<MapInfoResponse> searchNearbyByKeyword(String keyword, double longitude, double latitude, int radius) {
+    public List<MapInfoResponse> searchNearbyByKeyword(String keyword, double longitude, double latitude, int radius) {
         String url = KakaoUrlBuilder.buildKeywordSearchUrl(keyword, longitude, latitude, radius);
 
         return callKakaoApi(url, KakaoPlaceSearchResponse.class, body ->

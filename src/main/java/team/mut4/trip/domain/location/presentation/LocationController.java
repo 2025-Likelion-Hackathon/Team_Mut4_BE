@@ -9,6 +9,7 @@ import team.mut4.trip.domain.food.dto.response.FoodBasicResponse;
 import team.mut4.trip.domain.location.application.LocationService;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
 import team.mut4.trip.domain.location.dto.response.LocationSaveResponse;
+import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
 import team.mut4.trip.domain.location.dto.response.SearchResponse;
 
 import java.util.List;
@@ -49,16 +50,6 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedFoods);
     }
 
-    @GetMapping("/{locationId}/search/food")
-    public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFood(
-            @PathVariable Long locationId,
-            @RequestParam(defaultValue = "맛집") String keyword,
-            @RequestParam(defaultValue = "2000") int radius
-    ) {
-        List<FoodBasicResponse> savedFoods = locationService.searchAndSaveFood(locationId, keyword, radius);
-        return ResponseEntity.ok(savedFoods);
-    }
-
     @GetMapping("/{locationId}/nearby-food-all/grade")
     public ResponseEntity<List<FoodBasicResponse>> getNearbyAllFoodPlacesSortedByGrade(
             @PathVariable Long locationId,
@@ -66,17 +57,6 @@ public class LocationController implements LocationDocsController {
     ) {
         List<FoodBasicResponse> savedFoods =
                 locationService.findAndSaveAllNearbyFoodPlacesSortedByGrade(locationId, radius);
-        return ResponseEntity.ok(savedFoods);
-    }
-
-    @GetMapping("/{locationId}/search/food/grade")
-    public ResponseEntity<List<FoodBasicResponse>> searchAndSaveFoodSortedByGrade(
-            @PathVariable Long locationId,
-            @RequestParam(defaultValue = "맛집") String keyword,
-            @RequestParam(defaultValue = "2000") int radius
-    ) {
-        List<FoodBasicResponse> savedFoods =
-                locationService.searchAndSaveFoodSortedByGrade(locationId, keyword, radius);
         return ResponseEntity.ok(savedFoods);
     }
 
@@ -100,17 +80,6 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
-    @GetMapping("/{locationId}/search/accommodation")
-    public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodations(
-            @PathVariable Long locationId,
-            @RequestParam(defaultValue = "호텔") String keyword,
-            @RequestParam(defaultValue = "2000") int radius
-    ) {
-        List<AccommodationBasicResponse> savedAccommodations =
-                locationService.searchAndSaveAccommodations(locationId, keyword, radius);
-        return ResponseEntity.ok(savedAccommodations);
-    }
-
     @GetMapping("/{locationId}/nearby-accommodation-all/grade")
     public ResponseEntity<List<AccommodationBasicResponse>> getNearbyAllAccommodationsSortedByGrade(
             @PathVariable Long locationId,
@@ -121,15 +90,24 @@ public class LocationController implements LocationDocsController {
         return ResponseEntity.ok(savedAccommodations);
     }
 
-    @GetMapping("/{locationId}/search/accommodation/grade")
-    public ResponseEntity<List<AccommodationBasicResponse>> searchAndSaveAccommodationsSortedByGrade(
+    @GetMapping("/{locationId}/search")
+    public ResponseEntity<List<MapInfoResponse>> searchAndSaveFood(
             @PathVariable Long locationId,
-            @RequestParam(defaultValue = "호텔") String keyword,
+            @RequestParam(defaultValue = "맛집") String keyword,
             @RequestParam(defaultValue = "2000") int radius
     ) {
-        List<AccommodationBasicResponse> savedAccommodations =
-                locationService.searchAndSaveAccommodationsSortedByGrade(locationId, keyword, radius);
-        return ResponseEntity.ok(savedAccommodations);
+        List<MapInfoResponse> result = locationService.searchAndSaveByCategory(locationId, keyword, radius);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{locationId}/search/grade")
+    public ResponseEntity<List<MapInfoResponse>> searchAndSaveByCategorySortedByGrade(
+            @PathVariable Long locationId,
+            @RequestParam String keyword,
+            @RequestParam int radius
+    ) {
+        List<MapInfoResponse> result = locationService.searchAndSaveByCategorySortedByGrade(locationId, keyword, radius);
+        return ResponseEntity.ok(result);
     }
 
 }
