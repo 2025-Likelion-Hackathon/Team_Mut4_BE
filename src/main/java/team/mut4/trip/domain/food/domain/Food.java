@@ -13,6 +13,10 @@ import team.mut4.trip.global.domain.BaseTimeEntity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(
+        name = "food",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"})}
+)
 public class Food extends BaseTimeEntity {
 
     @Id
