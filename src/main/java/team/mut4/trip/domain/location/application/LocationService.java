@@ -21,6 +21,7 @@ import team.mut4.trip.global.util.GradeUtil;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +35,16 @@ public class LocationService {
     @Transactional
     public LocationSaveResponse saveLocation(LocationSaveRequest request) {
         String address = kakaoMapClient.getAddress(request.longitude(), request.latitude());
+
+        Optional<Location> existingLocation = locationRepository.findByAddress(address);
+
+        if (existingLocation.isPresent()) {
+            Location location = existingLocation.get();
+            return LocationSaveResponse.builder()
+                    .locationId(location.getId())
+                    .address(location.getAddress())
+                    .build();
+        }
 
         Location location = Location.builder()
                 .latitude(request.latitude())
