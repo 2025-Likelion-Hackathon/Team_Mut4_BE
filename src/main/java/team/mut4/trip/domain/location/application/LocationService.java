@@ -90,7 +90,9 @@ public class LocationService {
     private List<FoodBasicResponse> saveFoodsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
         List<FoodBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
-            Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
+            String normalizedName = place.placeName().trim();
+            String normalizedAddress = place.addressName().trim();
+            Food food = foodRepository.findByNameAndAddress(normalizedName, normalizedAddress)
                     .orElseGet(() -> foodRepository.save(
                             Food.builder()
                                     .name(place.placeName())
@@ -165,7 +167,9 @@ public class LocationService {
     private List<AccommodationBasicResponse> saveAccommodationsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
         List<AccommodationBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
-            Accommodation accommodation = accommodationRepository.findByNameAndAddress(place.placeName(), place.addressName())
+            String normalizedName = place.placeName().trim();
+            String normalizedAddress = place.addressName().trim();
+            Accommodation accommodation = accommodationRepository.findByNameAndAddress(normalizedName, normalizedAddress)
                     .orElseGet(() -> accommodationRepository.save(
                             Accommodation.builder()
                                     .name(place.placeName())
