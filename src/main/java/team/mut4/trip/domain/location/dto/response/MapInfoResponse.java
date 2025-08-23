@@ -7,6 +7,9 @@ import lombok.Builder;
 @Schema(description = "음식점/숙박 정보 DTO")
 public record MapInfoResponse(
 
+        @Schema(description = "DB ID", example = "1")
+        Long id,
+
         @Schema(description = "장소 이름", example = "동춘옥")
         String placeName,
 
@@ -29,6 +32,9 @@ public record MapInfoResponse(
         double latitude,
 
         @Schema(description = "경도", example = "127.173115692272")
-        double longitude
+        double longitude,
+
+        @Schema(description = "평균 평점", example = "N/A")
+        String averageGrad
 
 ) {}
