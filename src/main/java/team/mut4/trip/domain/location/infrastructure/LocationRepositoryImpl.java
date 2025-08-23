@@ -6,6 +6,8 @@ import team.mut4.trip.domain.location.domain.Location;
 import team.mut4.trip.domain.location.domain.LocationRepository;
 import team.mut4.trip.domain.location.presentation.exception.LocationNotFoundException;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Repository
 public class LocationRepositoryImpl implements LocationRepository {
@@ -21,6 +23,11 @@ public class LocationRepositoryImpl implements LocationRepository {
     public Location findByLocationId(Long locationId) {
         return locationJpaRepository.findById(locationId)
                 .orElseThrow(LocationNotFoundException::new);
+    }
+
+    @Override
+    public Optional<Location> findByAddress(String address) {
+        return locationJpaRepository.findByAddress(address);
     }
 
 }
