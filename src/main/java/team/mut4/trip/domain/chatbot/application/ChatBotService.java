@@ -1,9 +1,8 @@
 package team.mut4.trip.domain.chatbot.application;
 
-import jakarta.validation.Valid;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import team.mut4.trip.domain.chatbot.domain.ChatBot;
@@ -16,6 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ChatBotService {
+
+    private final ObjectMapper objectMapper;
+
 
     private final WebClient webClient;
     private final ChatBotRepository chatBotRepository;
@@ -45,19 +47,22 @@ public class ChatBotService {
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(ChatBotResponse.class)
-                .doOnSuccess(aiResponse -> {
-                    create(aiResponse);
-                });
+                .doOnSuccess(this::create);
 
     }
 
     private void create(ChatBotResponse aiResponse) {
-        ChatBot chat = ChatBot.builder()
-                .sessionId(aiResponse.sessionId())
-                .role(aiResponse.message().role())
-                .content(aiResponse.message().content().toString())
-                .build();
+        try {
+            String contentJson = objectMapper.writeValueAsString(aiResponse.message().content());
 
-        chatBotRepository.save(chat);
+            ChatBot chat = ChatBot.builder()
+                    .sessionId(aiResponse.sessionId())
+                    .role(aiResponse.message().role())
+                    .content(contentJson)
+                    .build();
+
+            chatBotRepository.save(chat);
+        } catch (Exception e) {
+        }
     }
 }
