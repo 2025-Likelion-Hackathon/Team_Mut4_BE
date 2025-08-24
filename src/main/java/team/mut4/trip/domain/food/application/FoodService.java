@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.food.domain.FoodRepository;
 import team.mut4.trip.domain.food.dto.response.FoodDetailResponse;
+import team.mut4.trip.domain.food.dto.response.FoodMenuInfoResponse;
 import team.mut4.trip.domain.foodreviewtag.application.FoodReviewTagService;
 import team.mut4.trip.domain.foodreviewtag.dto.response.FoodReviewTagSummaryResponse;
 import team.mut4.trip.domain.foodreview.application.FoodReviewService;
@@ -33,10 +34,31 @@ public class FoodService {
                 .map(FoodReviewInfoResponse::from)
                 .toList();
 
+        List<FoodMenuInfoResponse> menuResponses = List.of(
+                new FoodMenuInfoResponse("메뉴 이름 A", 10000),
+                new FoodMenuInfoResponse("메뉴 이름 A", 10000),
+                new FoodMenuInfoResponse("메뉴 이름 A", 10000),
+                new FoodMenuInfoResponse("메뉴 이름 A", 10000),
+                new FoodMenuInfoResponse("메뉴 이름 A", 10000)
+        );
+
+        int restaurantPrice = 10000;
+        int regionRestaurantAveragePrice = getRandomPrice(restaurantPrice);
+
         return FoodDetailResponse.from(food,
                 food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A",
                 topTags,
-                reviewResponses);
+                reviewResponses,
+                menuResponses,
+                restaurantPrice,
+                regionRestaurantAveragePrice);
+    }
+
+    private int getRandomPrice(int restaurantPrice) {
+        double min = restaurantPrice * 0.8;
+        double max = restaurantPrice * 1.2;
+        int price = (int) (min + Math.random() * (max - min));
+        return Math.round(price / 100f) * 100;
     }
 
 }
