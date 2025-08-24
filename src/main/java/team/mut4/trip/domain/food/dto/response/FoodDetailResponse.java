@@ -40,7 +40,7 @@ public record FoodDetailResponse(
         double longitude,
 
         @Schema(description = "평균 평점 등급", example = "A")
-        String averageGrad,
+        String averageGrade,
 
         @Schema(description = "상위 태그 리스트", example = """
                 [
@@ -60,7 +60,7 @@ public record FoodDetailResponse(
         List<FoodReviewInfoResponse> reviews
 
 ) {
-    public static FoodDetailResponse from(Food food, String averageGrad,
+    public static FoodDetailResponse from(Food food, String averageGrade,
                                           List<FoodReviewTagSummaryResponse> topTags,
                                           List<FoodReviewInfoResponse> reviews) {
         return FoodDetailResponse.builder()
@@ -73,7 +73,7 @@ public record FoodDetailResponse(
                 .placeUrl(food.getPlaceUrl())
                 .latitude(food.getLatitude())
                 .longitude(food.getLongitude())
-                .averageGrad(averageGrad)
+                .averageGrade(averageGrade)
                 .topTags(topTags)
                 .reviews(reviews)
                 .build();

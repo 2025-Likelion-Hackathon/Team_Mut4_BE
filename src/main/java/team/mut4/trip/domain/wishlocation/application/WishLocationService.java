@@ -138,7 +138,7 @@ public class WishLocationService {
     }
 
     private Comparator<FoodBasicResponse> foodGradeComparator() {
-        return Comparator.comparingInt(f -> GradeUtil.toRank(f.averageGrad()));
+        return Comparator.comparingInt(f -> GradeUtil.toRank(f.averageGrade()));
     }
 
     @Transactional
