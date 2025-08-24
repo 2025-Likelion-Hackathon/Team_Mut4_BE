@@ -65,7 +65,7 @@ public record FoodDetailResponse(
                   {"menuName": "메뉴 이름 A", "menuPrice": 10000},
                   {"menuName": "메뉴 이름 A", "menuPrice": 10000},
                   {"menuName": "메뉴 이름 A", "menuPrice": 10000},
-                  {"menuName": "메뉴 이름 A", "menuPrice": 10000},
+                  {"menuName": "메뉴 이름 A", "menuPrice": 10000}
                 ]
                 """)
         List<FoodMenuInfoResponse> menus,
