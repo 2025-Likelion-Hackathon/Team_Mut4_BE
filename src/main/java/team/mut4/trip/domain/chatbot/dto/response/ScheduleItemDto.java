@@ -18,10 +18,10 @@ public record ScheduleItemDto(
         String address,
 
         @Schema(description = "위도", example = "37.123456")
-        double latitude,
+        Double latitude,
 
         @Schema(description = "일정 항목 경도", example = "127.123456")
-        double longitude,
+        Double longitude,
 
         @Schema(description = "설명", example = "속초 중앙시장은 신선한 해산물과 다양한 먹거리가 가득한 전통 시장입니다.")
         String description,
