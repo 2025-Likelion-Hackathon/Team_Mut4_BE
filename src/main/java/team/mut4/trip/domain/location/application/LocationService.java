@@ -131,7 +131,7 @@ public class LocationService {
     }
 
     private Comparator<FoodBasicResponse> gradeComparator() {
-        return Comparator.comparingInt(f -> GradeUtil.toRank(f.averageGrad()));
+        return Comparator.comparingInt(f -> GradeUtil.toRank(f.averageGrade()));
     }
 
     @Transactional
