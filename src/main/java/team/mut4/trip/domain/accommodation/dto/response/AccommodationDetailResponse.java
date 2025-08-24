@@ -57,14 +57,22 @@ public record AccommodationDetailResponse(
                   {"id": 2, "username": "고소한 방", "content": "위치가 좋아요."}
                 ]
                 """)
-        List<AccommodationReviewInfoResponse> reviews
+        List<AccommodationReviewInfoResponse> reviews,
+
+        @Schema(description = "해당 숙소 가격", example = "150000")
+        int accommodationPrice,
+
+        @Schema(description = "지역 숙소 평균 가격", example = "170000")
+        int regionAccommodationAveragePrice
 
 ) {
     public static AccommodationDetailResponse from(
             Accommodation accommodation,
             String averageGrade,
             List<AccommodationReviewTagSummaryResponse> topTags,
-            List<AccommodationReviewInfoResponse> reviews
+            List<AccommodationReviewInfoResponse> reviews,
+            int accommodationPrice,
+            int regionAccommodationAveragePrice
     ) {
         return AccommodationDetailResponse.builder()
                 .id(accommodation.getId())
@@ -79,6 +87,8 @@ public record AccommodationDetailResponse(
                 .averageGrade(averageGrade)
                 .topTags(topTags)
                 .reviews(reviews)
+                .accommodationPrice(accommodationPrice)
+                .regionAccommodationAveragePrice(regionAccommodationAveragePrice)
                 .build();
     }
 }
