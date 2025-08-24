@@ -57,12 +57,35 @@ public record FoodDetailResponse(
                   {"id": 2, "username": "짭짤한 밥", "content": "string"}
                 ]
                 """)
-        List<FoodReviewInfoResponse> reviews
+        List<FoodReviewInfoResponse> reviews,
+
+        @Schema(description = "메뉴 리스트", example = """
+                [
+                  {"menuName": "메뉴 이름 A", "menuPrice": 10000},
+                  {"menuName": "메뉴 이름 A", "menuPrice": 10000},
+                  {"menuName": "메뉴 이름 A", "menuPrice": 10000},
+                  {"menuName": "메뉴 이름 A", "menuPrice": 10000},
+                  {"menuName": "메뉴 이름 A", "menuPrice": 10000},
+                ]
+                """)
+        List<FoodMenuInfoResponse> menus,
+
+        @Schema(description = "해당 식당 가격", example = "10000")
+        int restaurantPrice,
+
+        @Schema(description = "지역 식당 평균 가격", example = "15000")
+        int regionRestaurantAveragePrice
+
+
+
 
 ) {
     public static FoodDetailResponse from(Food food, String averageGrade,
                                           List<FoodReviewTagSummaryResponse> topTags,
-                                          List<FoodReviewInfoResponse> reviews) {
+                                          List<FoodReviewInfoResponse> reviews,
+                                          List<FoodMenuInfoResponse> menus,
+                                          int restaurantPrice,
+                                          int regionRestaurantAveragePrice) {
         return FoodDetailResponse.builder()
                 .id(food.getId())
                 .name(food.getName())
@@ -76,6 +99,9 @@ public record FoodDetailResponse(
                 .averageGrade(averageGrade)
                 .topTags(topTags)
                 .reviews(reviews)
+                .menus(menus)
+                .restaurantPrice(restaurantPrice)
+                .regionRestaurantAveragePrice(regionRestaurantAveragePrice)
                 .build();
     }
 }
