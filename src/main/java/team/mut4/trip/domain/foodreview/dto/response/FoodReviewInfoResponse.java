@@ -14,11 +14,11 @@ public record FoodReviewInfoResponse(
 
 ) {
     public static FoodReviewInfoResponse from(FoodReview foodReview) {
-        return new FoodReviewInfoResponse(
-                foodReview.getId(),
-                foodReview.getUsername(),
-                foodReview.getContent()
-        );
+        return FoodReviewInfoResponse.builder()
+                .id(foodReview.getId())
+                .username(foodReview.getUsername())
+                .content(foodReview.getContent())
+                .build();
     }
 }
 
