@@ -43,22 +43,14 @@ public class FoodService {
         );
 
         int restaurantPrice = 10000;
-        int regionRestaurantAveragePrice = getRandomPrice(restaurantPrice);
 
         return FoodDetailResponse.from(food,
                 food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A",
                 topTags,
                 reviewResponses,
                 menuResponses,
-                restaurantPrice,
-                regionRestaurantAveragePrice);
-    }
-
-    private int getRandomPrice(int restaurantPrice) {
-        double min = restaurantPrice * 0.8;
-        double max = restaurantPrice * 1.2;
-        int price = (int) (min + Math.random() * (max - min));
-        return Math.round(price / 100f) * 100;
+                restaurantPrice
+                );
     }
 
 }

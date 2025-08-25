@@ -41,6 +41,10 @@ public class Food extends BaseTimeEntity {
 
     private double averageScore;
 
+    private int foodAveragePrice;
+
+    private int priceDifference;
+
     @Enumerated(EnumType.STRING)
     private FoodGrade averageGrade;
 
@@ -60,6 +64,8 @@ public class Food extends BaseTimeEntity {
             String placeUrl,
             double latitude,
             double longitude,
+            int foodAveragePrice,
+            int priceDifference,
             Location location,
             WishLocation wishLocation
     ) {
@@ -71,6 +77,8 @@ public class Food extends BaseTimeEntity {
         this.placeUrl = placeUrl;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.foodAveragePrice = foodAveragePrice;
+        this.priceDifference = priceDifference;
         this.location = location;
         this.wishLocation = wishLocation;
     }

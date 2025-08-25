@@ -35,7 +35,11 @@ public record FoodBasicResponse(
         @Schema(description = "경도", example = "127.172901854085")
         double longitude,
 
-        String averageGrade
+        String averageGrade,
+
+        int foodAveragePrice,
+
+        int priceDifference
 
 ) {
     public static FoodBasicResponse from(Food food, String averageGrade) {
@@ -50,6 +54,8 @@ public record FoodBasicResponse(
                 .latitude(food.getLatitude())
                 .longitude(food.getLongitude())
                 .averageGrade(averageGrade)
+                .foodAveragePrice(food.getFoodAveragePrice())
+                .priceDifference(food.getPriceDifference())
                 .build();
     }
 }

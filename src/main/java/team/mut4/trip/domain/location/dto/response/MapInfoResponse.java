@@ -35,6 +35,10 @@ public record MapInfoResponse(
         double longitude,
 
         @Schema(description = "평균 평점", example = "N/A")
-        String averageGrade
+        String averageGrade,
+
+        int foodAveragePrice,
+
+        int priceDifference
 
 ) {}
