@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import team.mut4.trip.domain.chatbot.domain.ChatBot;
 import team.mut4.trip.domain.chatbot.domain.ChatBotRepository;
 import team.mut4.trip.domain.chatbot.dto.request.ChatBotRequest;
@@ -47,8 +48,11 @@ public class ChatBotService {
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(ChatBotResponse.class)
-                .doOnSuccess(this::create);
-
+                .doOnSuccess(aiResponse ->
+                        Mono.fromRunnable(() -> create(aiResponse))
+                                .subscribeOn(Schedulers.boundedElastic())
+                                .subscribe()
+                );
     }
 
     private void create(ChatBotResponse aiResponse) {
