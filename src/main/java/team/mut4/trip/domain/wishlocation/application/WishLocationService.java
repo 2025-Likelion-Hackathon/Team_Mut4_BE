@@ -232,7 +232,7 @@ public class WishLocationService {
     }
 
     private Comparator<AccommodationBasicResponse> accommodationGradeComparator() {
-        return Comparator.comparingInt(a -> GradeUtil.toRank(a.averageGrad()));
+        return Comparator.comparingInt(a -> GradeUtil.toRank(a.averageGrade()));
     }
 
 }
