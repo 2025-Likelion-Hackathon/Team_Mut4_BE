@@ -20,8 +20,8 @@ public class FoodReviewRepositoryImpl implements FoodReviewRepository {
     }
 
     @Override
-    public List<FoodReview> findAllByFood(Food food) {
-        return foodReviewJpaRepository.findAllByFood(food);
+    public List<FoodReview> findAllByFoodOrderByCreatedAtDesc(Food food) {
+        return foodReviewJpaRepository.findAllByFoodOrderByCreatedAtDesc(food);
     }
 
 }

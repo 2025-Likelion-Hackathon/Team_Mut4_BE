@@ -20,8 +20,8 @@ public class AccommodationReviewRepositoryImpl implements AccommodationReviewRep
     }
 
     @Override
-    public List<AccommodationReview> findAllByAccommodation(Accommodation accommodation) {
-        return accommodationReviewJpaRepository.findAllByAccommodation(accommodation);
+    public List<AccommodationReview> findAllByAccommodationOrderByCreatedAtDesc(Accommodation accommodation) {
+        return accommodationReviewJpaRepository.findAllByAccommodationOrderByCreatedAtDesc(accommodation);
     }
 
 }

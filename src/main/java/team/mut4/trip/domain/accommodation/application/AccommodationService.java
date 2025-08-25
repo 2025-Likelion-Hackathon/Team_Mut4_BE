@@ -31,7 +31,7 @@ public class AccommodationService {
                 accommodationReviewTagService.getTop3TagsByAccommodation(accommodation);
 
         List<AccommodationReviewInfoResponse> reviewResponses =
-                accommodationReviewRepository.findAllByAccommodation(accommodation).stream()
+                accommodationReviewRepository.findAllByAccommodationOrderByCreatedAtDesc(accommodation).stream()
                         .map(AccommodationReviewInfoResponse::from)
                         .toList();
 
