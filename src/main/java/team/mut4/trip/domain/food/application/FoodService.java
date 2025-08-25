@@ -9,9 +9,7 @@ import team.mut4.trip.domain.food.dto.response.FoodDetailResponse;
 import team.mut4.trip.domain.food.dto.response.FoodMenuInfoResponse;
 import team.mut4.trip.domain.foodreviewtag.application.FoodReviewTagService;
 import team.mut4.trip.domain.foodreviewtag.dto.response.FoodReviewTagSummaryResponse;
-import team.mut4.trip.domain.foodreview.application.FoodReviewService;
 import team.mut4.trip.domain.foodreview.domain.FoodReviewRepository;
-import team.mut4.trip.domain.foodreview.dto.response.FoodGradeSummaryResponse;
 import team.mut4.trip.domain.foodreview.dto.response.FoodReviewInfoResponse;
 
 import java.util.List;

@@ -9,14 +9,10 @@ import team.mut4.trip.domain.accommodationreview.domain.AccommodationGrade;
 import team.mut4.trip.domain.accommodationreview.domain.AccommodationReview;
 import team.mut4.trip.domain.accommodationreview.domain.AccommodationReviewRepository;
 import team.mut4.trip.domain.accommodationreview.dto.request.AccommodationReviewSaveRequest;
-import team.mut4.trip.domain.accommodationreview.dto.response.AccommodationGradeSummaryResponse;
 import team.mut4.trip.domain.accommodationreview.dto.response.AccommodationReviewSaveResponse;
 import team.mut4.trip.domain.accommodationreviewtag.application.AccommodationReviewTagService;
 import team.mut4.trip.domain.accommodationtag.application.AccommodationTagService;
 import team.mut4.trip.domain.accommodationtag.domain.AccommodationTag;
-import team.mut4.trip.domain.food.domain.Food;
-import team.mut4.trip.domain.foodreview.domain.FoodGrade;
-import team.mut4.trip.domain.foodreview.domain.FoodReview;
 import team.mut4.trip.global.util.RandomAccommodationNicknameGenerator;
 
 import java.util.List;

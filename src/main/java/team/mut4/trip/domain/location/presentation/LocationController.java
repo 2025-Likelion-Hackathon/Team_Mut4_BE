@@ -1,7 +1,6 @@
 package team.mut4.trip.domain.location.presentation;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team.mut4.trip.domain.accommodation.dto.response.AccommodationBasicResponse;
@@ -10,7 +9,6 @@ import team.mut4.trip.domain.location.application.LocationService;
 import team.mut4.trip.domain.location.dto.request.LocationSaveRequest;
 import team.mut4.trip.domain.location.dto.response.LocationSaveResponse;
 import team.mut4.trip.domain.location.dto.response.MapInfoResponse;
-import team.mut4.trip.domain.location.dto.response.SearchResponse;
 
 import java.util.List;
 
