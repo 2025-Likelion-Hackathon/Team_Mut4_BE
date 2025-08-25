@@ -18,7 +18,6 @@ import java.util.List;
 public class FoodReviewTagService {
 
     private final FoodReviewTagRepository foodReviewTagRepository;
-    private final FoodTagRepository foodTagRepository;
 
     @Transactional
     public void saveTagsForReview(FoodReview foodReview, List<FoodTag> tags) {

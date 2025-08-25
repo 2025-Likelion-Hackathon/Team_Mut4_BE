@@ -12,7 +12,6 @@ import team.mut4.trip.domain.foodreview.domain.FoodGrade;
 import team.mut4.trip.domain.foodreview.domain.FoodReview;
 import team.mut4.trip.domain.foodreview.domain.FoodReviewRepository;
 import team.mut4.trip.domain.foodreview.dto.request.FoodReviewSaveRequest;
-import team.mut4.trip.domain.foodreview.dto.response.FoodGradeSummaryResponse;
 import team.mut4.trip.domain.foodreview.dto.response.FoodReviewSaveResponse;
 import team.mut4.trip.global.util.RandomNicknameGenerator;
 
