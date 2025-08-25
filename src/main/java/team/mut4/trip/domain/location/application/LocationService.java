@@ -27,6 +27,8 @@ import java.util.Optional;
 @Service
 public class LocationService {
 
+    private static final int BASE_PRICE = 10000;
+
     private final LocationRepository locationRepository;
     private final KakaoMapClient kakaoMapClient;
     private final FoodRepository foodRepository;
@@ -90,6 +92,8 @@ public class LocationService {
     private List<FoodBasicResponse> saveFoodsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
         List<FoodBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
+            int foodAveragePrice = getRandomPrice();
+            int priceDifference = foodAveragePrice - BASE_PRICE;
             String normalizedName = place.placeName().trim();
             String normalizedAddress = place.addressName().trim();
             Food food = foodRepository.findByNameAndAddress(normalizedName, normalizedAddress)
@@ -104,6 +108,8 @@ public class LocationService {
                                     .latitude(place.latitude())
                                     .longitude(place.longitude())
                                     .location(location)
+                                    .foodAveragePrice(foodAveragePrice)
+                                    .priceDifference(priceDifference)
                                     .build()
                     ));
             savedList.add(FoodBasicResponse.from(food, food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A"));
@@ -221,6 +227,8 @@ public class LocationService {
         List<MapInfoResponse> result = new ArrayList<>();
 
         for (MapInfoResponse place : places) {
+            int foodAveragePrice = getRandomPrice();
+            int priceDifference = foodAveragePrice - BASE_PRICE;
             if (place.categoryName().startsWith("음식점")) {
                 Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
                         .orElseGet(() -> foodRepository.save(
@@ -234,6 +242,8 @@ public class LocationService {
                                         .latitude(place.latitude())
                                         .longitude(place.longitude())
                                         .location(location)
+                                        .foodAveragePrice(foodAveragePrice)
+                                        .priceDifference(priceDifference)
                                         .build()
                         ));
 
@@ -248,6 +258,8 @@ public class LocationService {
                         .latitude(food.getLatitude())
                         .longitude(food.getLongitude())
                         .averageGrade(food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A")
+                        .foodAveragePrice(food.getFoodAveragePrice())
+                        .priceDifference(food.getPriceDifference())
                         .build());
             } else if (place.categoryName().startsWith("여행")) {
                 Accommodation accommodation = accommodationRepository.findByNameAndAddress(place.placeName(), place.addressName())
@@ -294,6 +306,13 @@ public class LocationService {
         });
 
         return result;
+    }
+
+    private int getRandomPrice() {
+        double min = BASE_PRICE * 0.8;
+        double max = BASE_PRICE * 1.2;
+        int price = (int) (min + Math.random() * (max - min));
+        return Math.round(price / 100f) * 100;
     }
 
 }

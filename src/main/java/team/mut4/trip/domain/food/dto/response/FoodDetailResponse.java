@@ -74,7 +74,9 @@ public record FoodDetailResponse(
         int restaurantPrice,
 
         @Schema(description = "지역 식당 평균 가격", example = "15000")
-        int regionRestaurantAveragePrice
+        int foodAveragePrice,
+
+        int priceDifference
 
 
 
@@ -84,8 +86,8 @@ public record FoodDetailResponse(
                                           List<FoodReviewTagSummaryResponse> topTags,
                                           List<FoodReviewInfoResponse> reviews,
                                           List<FoodMenuInfoResponse> menus,
-                                          int restaurantPrice,
-                                          int regionRestaurantAveragePrice) {
+                                          int restaurantPrice
+                                          ) {
         return FoodDetailResponse.builder()
                 .id(food.getId())
                 .name(food.getName())
@@ -101,7 +103,8 @@ public record FoodDetailResponse(
                 .reviews(reviews)
                 .menus(menus)
                 .restaurantPrice(restaurantPrice)
-                .regionRestaurantAveragePrice(regionRestaurantAveragePrice)
+                .foodAveragePrice(food.getFoodAveragePrice())
+                .priceDifference(food.getPriceDifference())
                 .build();
     }
 }
