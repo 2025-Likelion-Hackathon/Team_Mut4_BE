@@ -208,7 +208,7 @@ public class LocationService {
     }
 
     private Comparator<AccommodationBasicResponse> accommodationGradeComparator() {
-        return Comparator.comparingInt(a -> GradeUtil.toRank(a.averageGrad()));
+        return Comparator.comparingInt(a -> GradeUtil.toRank(a.averageGrade()));
     }
 
     @Transactional
@@ -247,7 +247,7 @@ public class LocationService {
                         .placeUrl(food.getPlaceUrl())
                         .latitude(food.getLatitude())
                         .longitude(food.getLongitude())
-                        .averageGrad(food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A")
+                        .averageGrade(food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A")
                         .build());
             } else if (place.categoryName().startsWith("여행")) {
                 Accommodation accommodation = accommodationRepository.findByNameAndAddress(place.placeName(), place.addressName())
@@ -275,7 +275,7 @@ public class LocationService {
                         .placeUrl(accommodation.getPlaceUrl())
                         .latitude(accommodation.getLatitude())
                         .longitude(accommodation.getLongitude())
-                        .averageGrad(accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A")
+                        .averageGrade(accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A")
                         .build());
             }
         }
@@ -288,8 +288,8 @@ public class LocationService {
         List<MapInfoResponse> result = searchAndSaveByCategory(locationId, keyword, radius);
 
         result.sort((a, b) -> {
-            int rankA = a.averageGrad().equals("N/A") ? -1 : GradeUtil.toRank(a.averageGrad());
-            int rankB = b.averageGrad().equals("N/A") ? -1 : GradeUtil.toRank(b.averageGrad());
+            int rankA = a.averageGrade().equals("N/A") ? -1 : GradeUtil.toRank(a.averageGrade());
+            int rankB = b.averageGrade().equals("N/A") ? -1 : GradeUtil.toRank(b.averageGrade());
             return Integer.compare(rankB, rankA);
         });
 
