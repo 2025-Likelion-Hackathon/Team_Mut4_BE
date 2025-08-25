@@ -8,7 +8,6 @@ import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTag;
 import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTagRepository;
 import team.mut4.trip.domain.foodreviewtag.dto.response.FoodReviewTagSummaryResponse;
 import team.mut4.trip.domain.foodtag.domain.FoodTag;
-import team.mut4.trip.domain.foodtag.domain.FoodTagRepository;
 import team.mut4.trip.domain.foodreview.domain.FoodReview;
 
 import java.util.List;
