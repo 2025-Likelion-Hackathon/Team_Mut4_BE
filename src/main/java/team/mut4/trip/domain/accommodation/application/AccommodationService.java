@@ -36,24 +36,14 @@ public class AccommodationService {
                         .toList();
 
         int accommodationPrice = 150000;
-        int regionAccommodationAveragePrice = getRandomPrice(accommodationPrice);
-
 
         return AccommodationDetailResponse.from(
                 accommodation,
                 accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A",
                 topTags,
                 reviewResponses,
-                accommodationPrice,
-                regionAccommodationAveragePrice
+                accommodationPrice
         );
-    }
-
-    private int getRandomPrice(int accommodationPrice) {
-        double min = accommodationPrice * 0.8;
-        double max = accommodationPrice * 1.2;
-        int price = (int) (min + Math.random() * (max - min));
-        return Math.round(price / 1000f) * 1000;
     }
 
 }

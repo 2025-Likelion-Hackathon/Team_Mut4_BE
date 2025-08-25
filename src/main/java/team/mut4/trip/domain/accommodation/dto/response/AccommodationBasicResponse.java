@@ -34,7 +34,11 @@ public record AccommodationBasicResponse(
         @Schema(description = "경도", example = "127.1559018")
         double longitude,
 
-        String averageGrade
+        String averageGrade,
+
+        int accommodationAveragePrice,
+
+        int priceDifference
 
 ) {
     public static AccommodationBasicResponse from(Accommodation accommodation, String averageGrade) {
@@ -49,6 +53,8 @@ public record AccommodationBasicResponse(
                 .latitude(accommodation.getLatitude())
                 .longitude(accommodation.getLongitude())
                 .averageGrade(averageGrade)
+                .accommodationAveragePrice(accommodation.getAccommodationAveragePrice())
+                .priceDifference(accommodation.getPriceDifference())
                 .build();
     }
 }

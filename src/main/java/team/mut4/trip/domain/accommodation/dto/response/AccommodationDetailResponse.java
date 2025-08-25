@@ -63,7 +63,9 @@ public record AccommodationDetailResponse(
         int accommodationPrice,
 
         @Schema(description = "지역 숙소 평균 가격", example = "170000")
-        int regionAccommodationAveragePrice
+        int regionAccommodationAveragePrice,
+
+        int priceDifference
 
 ) {
     public static AccommodationDetailResponse from(
@@ -71,8 +73,7 @@ public record AccommodationDetailResponse(
             String averageGrade,
             List<AccommodationReviewTagSummaryResponse> topTags,
             List<AccommodationReviewInfoResponse> reviews,
-            int accommodationPrice,
-            int regionAccommodationAveragePrice
+            int accommodationPrice
     ) {
         return AccommodationDetailResponse.builder()
                 .id(accommodation.getId())
@@ -88,7 +89,8 @@ public record AccommodationDetailResponse(
                 .topTags(topTags)
                 .reviews(reviews)
                 .accommodationPrice(accommodationPrice)
-                .regionAccommodationAveragePrice(regionAccommodationAveragePrice)
+                .regionAccommodationAveragePrice(accommodation.getAccommodationAveragePrice())
+                .priceDifference(accommodation.getPriceDifference())
                 .build();
     }
 }

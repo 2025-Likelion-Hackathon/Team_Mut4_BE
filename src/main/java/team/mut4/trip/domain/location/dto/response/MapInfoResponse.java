@@ -37,7 +37,7 @@ public record MapInfoResponse(
         @Schema(description = "평균 평점", example = "N/A")
         String averageGrade,
 
-        int foodAveragePrice,
+        int averagePrice,
 
         int priceDifference
 
