@@ -27,7 +27,8 @@ import java.util.Optional;
 @Service
 public class LocationService {
 
-    private static final int BASE_PRICE = 10000;
+    private static final int RESTAURANT_ABASE_PRICE = 10000;
+    private static final int ACCOMMODATION_ABASE_PRICE = 150000;
 
     private final LocationRepository locationRepository;
     private final KakaoMapClient kakaoMapClient;
@@ -92,8 +93,8 @@ public class LocationService {
     private List<FoodBasicResponse> saveFoodsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
         List<FoodBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
-            int foodAveragePrice = getRandomPrice();
-            int priceDifference = foodAveragePrice - BASE_PRICE;
+            int foodAveragePrice = getRandomRestaurantPrice();
+            int priceDifference = foodAveragePrice - RESTAURANT_ABASE_PRICE;
             String normalizedName = place.placeName().trim();
             String normalizedAddress = place.addressName().trim();
             Food food = foodRepository.findByNameAndAddress(normalizedName, normalizedAddress)
@@ -173,6 +174,8 @@ public class LocationService {
     private List<AccommodationBasicResponse> saveAccommodationsFromPlaces(Location location, List<MapInfoResponse> places, Integer limit) {
         List<AccommodationBasicResponse> savedList = new ArrayList<>();
         for (MapInfoResponse place : places) {
+            int accommodationAveragePrice = getRandomAccommodationPrice();
+            int priceDifference = accommodationAveragePrice - ACCOMMODATION_ABASE_PRICE;
             String normalizedName = place.placeName().trim();
             String normalizedAddress = place.addressName().trim();
             Accommodation accommodation = accommodationRepository.findByNameAndAddress(normalizedName, normalizedAddress)
@@ -187,6 +190,8 @@ public class LocationService {
                                     .latitude(place.latitude())
                                     .longitude(place.longitude())
                                     .location(location)
+                                    .accommodationAveragePrice(accommodationAveragePrice)
+                                    .priceDifference(priceDifference)
                                     .build()
                     ));
             savedList.add(AccommodationBasicResponse.from(accommodation, accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A"));
@@ -227,8 +232,8 @@ public class LocationService {
         List<MapInfoResponse> result = new ArrayList<>();
 
         for (MapInfoResponse place : places) {
-            int foodAveragePrice = getRandomPrice();
-            int priceDifference = foodAveragePrice - BASE_PRICE;
+            int foodAveragePrice = getRandomRestaurantPrice();
+            int priceDifference = foodAveragePrice - RESTAURANT_ABASE_PRICE;
             if (place.categoryName().startsWith("음식점")) {
                 Food food = foodRepository.findByNameAndAddress(place.placeName(), place.addressName())
                         .orElseGet(() -> foodRepository.save(
@@ -258,10 +263,12 @@ public class LocationService {
                         .latitude(food.getLatitude())
                         .longitude(food.getLongitude())
                         .averageGrade(food.getAverageGrade() != null ? food.getAverageGrade().name() : "N/A")
-                        .foodAveragePrice(food.getFoodAveragePrice())
+                        .averagePrice(food.getFoodAveragePrice())
                         .priceDifference(food.getPriceDifference())
                         .build());
             } else if (place.categoryName().startsWith("여행")) {
+                int accommodationAveragePrice = getRandomAccommodationPrice();
+                int accommodationPriceDifference = accommodationAveragePrice - ACCOMMODATION_ABASE_PRICE;
                 Accommodation accommodation = accommodationRepository.findByNameAndAddress(place.placeName(), place.addressName())
                         .orElseGet(() -> accommodationRepository.save(
                                 Accommodation.builder()
@@ -274,6 +281,8 @@ public class LocationService {
                                         .latitude(place.latitude())
                                         .longitude(place.longitude())
                                         .location(location)
+                                        .accommodationAveragePrice(accommodationAveragePrice)
+                                        .priceDifference(accommodationPriceDifference)
                                         .build()
                         ));
 
@@ -288,6 +297,8 @@ public class LocationService {
                         .latitude(accommodation.getLatitude())
                         .longitude(accommodation.getLongitude())
                         .averageGrade(accommodation.getAverageGrade() != null ? accommodation.getAverageGrade().name() : "N/A")
+                        .averagePrice(accommodation.getAccommodationAveragePrice())
+                        .priceDifference(accommodation.getPriceDifference())
                         .build());
             }
         }
@@ -308,11 +319,18 @@ public class LocationService {
         return result;
     }
 
-    private int getRandomPrice() {
-        double min = BASE_PRICE * 0.8;
-        double max = BASE_PRICE * 1.2;
+    private int getRandomRestaurantPrice() {
+        double min = RESTAURANT_ABASE_PRICE * 0.8;
+        double max = RESTAURANT_ABASE_PRICE * 1.2;
         int price = (int) (min + Math.random() * (max - min));
         return Math.round(price / 100f) * 100;
+    }
+
+    private int getRandomAccommodationPrice() {
+        double min = ACCOMMODATION_ABASE_PRICE * 0.8;
+        double max = ACCOMMODATION_ABASE_PRICE * 1.2;
+        int price = (int) (min + Math.random() * (max - min));
+        return Math.round(price / 1000f) * 1000;
     }
 
 }

@@ -42,6 +42,10 @@ public class Accommodation extends BaseTimeEntity {
 
     private double averageScore;
 
+    private int accommodationAveragePrice;
+
+    private int priceDifference;
+
     @Enumerated(EnumType.STRING)
     private AccommodationGrade averageGrade;
 
@@ -61,6 +65,8 @@ public class Accommodation extends BaseTimeEntity {
             String placeUrl,
             double latitude,
             double longitude,
+            int accommodationAveragePrice,
+            int priceDifference,
             Location location,
             WishLocation wishLocation
     ) {
@@ -72,6 +78,8 @@ public class Accommodation extends BaseTimeEntity {
         this.placeUrl = placeUrl;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.accommodationAveragePrice = accommodationAveragePrice;
+        this.priceDifference = priceDifference;
         this.location = location;
         this.wishLocation = wishLocation;
     }
