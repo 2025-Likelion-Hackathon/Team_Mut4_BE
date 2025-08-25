@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.mut4.trip.domain.accommodationreview.domain.AccommodationGrade;
-import team.mut4.trip.domain.foodreview.domain.FoodGrade;
 import team.mut4.trip.domain.location.domain.Location;
-import team.mut4.trip.domain.wishlocation.domain.WishLocation;
 import team.mut4.trip.global.domain.BaseTimeEntity;
 
 @Getter
@@ -52,9 +50,6 @@ public class Accommodation extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Location location;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private WishLocation wishLocation;
-
     @Builder
     private Accommodation(
             String name,
@@ -67,8 +62,7 @@ public class Accommodation extends BaseTimeEntity {
             double longitude,
             int accommodationAveragePrice,
             int priceDifference,
-            Location location,
-            WishLocation wishLocation
+            Location location
     ) {
         this.name = name;
         this.address = address;
@@ -81,7 +75,6 @@ public class Accommodation extends BaseTimeEntity {
         this.accommodationAveragePrice = accommodationAveragePrice;
         this.priceDifference = priceDifference;
         this.location = location;
-        this.wishLocation = wishLocation;
     }
 
     public void updateAverage(double newScore, AccommodationGrade newGrade) {

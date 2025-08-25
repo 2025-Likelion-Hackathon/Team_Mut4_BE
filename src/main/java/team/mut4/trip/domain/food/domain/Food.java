@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.mut4.trip.domain.foodreview.domain.FoodGrade;
 import team.mut4.trip.domain.location.domain.Location;
-import team.mut4.trip.domain.wishlocation.domain.WishLocation;
 import team.mut4.trip.global.domain.BaseTimeEntity;
 
 @Getter
@@ -51,9 +50,6 @@ public class Food extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Location location;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private WishLocation wishLocation;
-
     @Builder
     private Food(
             String name,
@@ -66,8 +62,7 @@ public class Food extends BaseTimeEntity {
             double longitude,
             int foodAveragePrice,
             int priceDifference,
-            Location location,
-            WishLocation wishLocation
+            Location location
     ) {
         this.name = name;
         this.address = address;
@@ -80,7 +75,6 @@ public class Food extends BaseTimeEntity {
         this.foodAveragePrice = foodAveragePrice;
         this.priceDifference = priceDifference;
         this.location = location;
-        this.wishLocation = wishLocation;
     }
 
     public void updateAverage(double newScore, FoodGrade newGrade) {
