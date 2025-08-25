@@ -8,6 +8,6 @@ public interface AccommodationReviewRepository {
 
     void save(AccommodationReview accommodationReview);
 
-    List<AccommodationReview> findAllByAccommodation(Accommodation accommodation);
+    List<AccommodationReview> findAllByAccommodationOrderByCreatedAtDesc(Accommodation accommodation);
 
 }

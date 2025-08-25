@@ -60,7 +60,7 @@ public class AccommodationReviewService {
 
     @Transactional
     protected void updateFoodAverage(Accommodation accommodation) {
-        List<AccommodationReview> reviews = accommodationReviewRepository.findAllByAccommodation(accommodation);
+        List<AccommodationReview> reviews = accommodationReviewRepository.findAllByAccommodationOrderByCreatedAtDesc(accommodation);
         double avgScore = reviews.stream()
                 .mapToInt(r -> r.getAccommodationGrade().getScore())
                 .average()

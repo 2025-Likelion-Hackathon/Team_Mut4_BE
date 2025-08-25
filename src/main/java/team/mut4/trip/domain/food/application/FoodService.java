@@ -30,7 +30,7 @@ public class FoodService {
 
         List<FoodReviewTagSummaryResponse> topTags = foodReviewTagService.getTop3TagsByFood(food);
 
-        List<FoodReviewInfoResponse> reviewResponses = foodReviewRepository.findAllByFood(food).stream()
+        List<FoodReviewInfoResponse> reviewResponses = foodReviewRepository.findAllByFoodOrderByCreatedAtDesc(food).stream()
                 .map(FoodReviewInfoResponse::from)
                 .toList();
 

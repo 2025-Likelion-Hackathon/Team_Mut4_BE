@@ -8,6 +8,6 @@ public interface FoodReviewRepository {
 
     void save(FoodReview foodReview);
 
-    List<FoodReview> findAllByFood(Food food);
+    List<FoodReview> findAllByFoodOrderByCreatedAtDesc(Food food);
 
 }

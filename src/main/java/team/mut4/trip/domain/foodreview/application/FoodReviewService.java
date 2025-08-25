@@ -54,7 +54,7 @@ public class FoodReviewService {
 
     @Transactional
     protected void updateFoodAverage(Food food) {
-        List<FoodReview> reviews = foodReviewRepository.findAllByFood(food);
+        List<FoodReview> reviews = foodReviewRepository.findAllByFoodOrderByCreatedAtDesc(food);
         double avgScore = reviews.stream()
                 .mapToInt(r -> r.getFoodGrade().getScore())
                 .average()

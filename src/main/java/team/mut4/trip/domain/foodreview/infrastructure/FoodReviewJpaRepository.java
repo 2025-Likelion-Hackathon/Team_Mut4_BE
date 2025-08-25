@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface FoodReviewJpaRepository extends JpaRepository<FoodReview, Long> {
 
-    List<FoodReview> findAllByFood(Food food);
+    List<FoodReview> findAllByFoodOrderByCreatedAtDesc(Food food);
 
 }

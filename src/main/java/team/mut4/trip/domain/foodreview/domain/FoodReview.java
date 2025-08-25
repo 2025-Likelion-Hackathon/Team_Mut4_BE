@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import team.mut4.trip.domain.food.domain.Food;
 import team.mut4.trip.domain.foodreviewtag.domain.FoodReviewTag;
+import team.mut4.trip.global.domain.BaseTimeEntity;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class FoodReview {
+public class FoodReview extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
